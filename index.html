@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no" />
+  <title>Tumadam MOD – Profile</title>
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+  <!-- Typed.js -->
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12/lib/typed.min.js"></script>
+
+  <style>
+    /* ==== Reset & base ==== */
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{height:100%;font-family:'Segoe UI',sans-serif;color:#333}
+    a{text-decoration:none}
+    img{display:block;max-width:100%}
+    body{background:linear-gradient(to bottom,#f0f4ff,#dceeff);overflow-x:hidden}
+
+    body.loading{overflow:hidden}          /* ngăn cuộn khi splash */
+
+    /* ==== Hamburger ==== */
+    .menu-btn{position:fixed;top:20px;right:20px;width:40px;height:40px;background:none;border:none;cursor:pointer;z-index:1100;display:flex;align-items:center;justify-content:center;font-size:1.8rem;color:#333}
+
+    /* ==== Mobile menu ==== */
+    #mobileMenu{position:fixed;top:0;right:0;width:70%;height:100%;padding:40px 20px;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);transform:translateX(100%);transition:transform .3s ease;z-index:1000}
+    #mobileMenu.open{transform:translateX(0)}
+    #mobileMenu .close-btn{position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.6rem;color:#fff;cursor:pointer}
+    #mobileMenu a{display:block;margin:24px 0;font-size:20px;color:#fff}
+
+    /* ==== Profile ==== */
+    .profile{padding-top:80px;text-align:center}
+    .avatar{width:120px;height:120px;border-radius:50%;box-shadow:0 0 15px rgba(0,0,0,.2);margin:0 auto 15px}
+    .profile h2{font-size:20px;font-weight:400}
+    .profile h1{font-size:32px;font-weight:700;display:inline-flex;align-items:center}
+    .verify{width:30px;margin-left:6px}
+    .typed-text{font-size:18px;margin-top:6px}
+    .gradient-text{background:linear-gradient(90deg,#6b6bf2,#a16bf2);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+    /* ==== Social ==== */
+    .socials{display:flex;justify-content:center;gap:16px;margin:24px 0}
+    .socials .icon{width:56px;height:56px;background:#333;border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+
+    /* ==== Card list ==== */
+    .card-list{max-width:400px;margin:0 auto 40px;display:flex;flex-direction:column;gap:16px;padding:0 16px}
+    .link-card{background:#fff;padding:14px 16px;border-radius:16px;box-shadow:0 6px 16px rgba(0,0,0,.1);display:flex;justify-content:space-between;align-items:center}
+    .link-card .text{font-size:16px;font-weight:500}
+    .link-card .btn{width:40px;height:40px;background:#4dabf7;color:#fff;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
+
+    /* ==== Section ==== */
+    .section{padding:32px 0;background:rgba(255,255,255,.5)}
+    .section h2{text-align:center;font-size:28px;margin-bottom:24px}
+    .spinner{display:inline-block;margin-left:8px;animation:spin 1.5s linear infinite}@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+
+    /* ==== Items ==== */
+    .items{max-width:400px;margin:0 auto;display:flex;flex-direction:column;gap:12px;padding:0 16px}
+    .item{background:#e0e8ff;padding:12px 14px;border-radius:12px;display:flex;justify-content:space-between;align-items:center}
+    .item .info{display:flex;align-items:center;gap:10px}
+    .item .info img{width:48px;height:48px;border-radius:12px}
+    .item .meta .title{font-size:16px;font-weight:600}
+    .item .meta .subtitle{font-size:14px;color:#555;margin-top:4px}
+    .action{background:#4dabf7;color:#fff;width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px}
+
+    /* ==== Skills ==== */
+    .skills-section{background:#fff}
+    .container{max-width:600px;margin:0 auto;padding:0 16px}
+    .skill{max-width:400px;margin:12px auto}
+    .skill-label{font-weight:600;text-align:left;margin:0 0 6px 4px;font-size:clamp(14px,3vw,18px)}
+    .skill-bar{width:100%;height:16px;background:#e6e6e6;border-radius:20px;overflow:hidden;margin-bottom:24px}
+    .skill-fill{width:0;height:100%;border-radius:20px;transition:width .9s ease-out}
+    .skill-fill[data-color="yellow"]{background:#f1c40f}
+    .skill-fill[data-color="blue"]{background:#2f57ff}
+    .skill-fill[data-color="gray"]{background:#bdc3c7}
+    .skill-fill[data-color="red"]{background:#e74c3c}
+
+    /* ==== Footer ==== */
+    .footer{padding:24px 0;background:#fff;text-align:center;font-size:14px;color:#666}
+
+    /* ==== Media ==== */
+    @media(min-width:768px){.section{padding:48px 0}.skill-bar{height:18px}}
+    @media(min-width:1024px){body{font-size:17px}.section h2{font-size:32px}.container{max-width:700px}}
+
+    /* ==== Intro Splash ==== */
+    #introSplash{position:fixed;inset:0;background:#000;display:flex;align-items:center;justify-content:center;z-index:2000;animation:fadeOut 1s 2.3s forwards}
+    .intro-content{text-align:center;color:#fff}
+    .intro-avatar{width:90px;height:90px;border-radius:50%;box-shadow:0 0 12px #fff;margin:0 auto 14px;animation:pop .6s ease-out}
+    .intro-title{font-size:28px;font-weight:700;text-shadow:0 0 8px #fff;animation:slide .6s .3s ease-out backwards}
+    .intro-sub{font-size:16px;margin-top:6px;opacity:.8;animation:slide .6s .5s ease-out backwards}
+    @keyframes fadeOut{to{opacity:0;visibility:hidden}}
+    @keyframes pop{0%{transform:scale(0);}80%{transform:scale(1.1);}100%{transform:scale(1)}}
+    @keyframes slide{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+    /* ===== Help Section (Blog & FAQ) ===== */
+.help-section {
+  background: #fff;
+  padding: 48px 16px;
+}
+
+.help-container {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+}
+
+.help-item {
+  text-align: center;
+  text-decoration: none;
+  color: #555;
+  transition: transform 0.2s ease;
+}
+
+.help-item:hover {
+  transform: scale(1.03);
+}
+
+.help-icon {
+  width: 72px;
+  height: auto;
+  object-fit: contain;
+}
+
+.help-text {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #555;
+}
+  </style>
+</head>
+
+<body class="loading">
+
+  <!-- Splash Intro -->
+  <div id="introSplash">
+    <div class="intro-content">
+      <img src="https://i.imgur.com/JI0C1ze.jpeg" class="intro-avatar" alt="Avatar">
+      <h1 class="intro-title">Tumadam&nbsp;MOD</h1>
+      <p class="intro-sub">Loading&nbsp;Profile…</p>
+    </div>
+  </div>
+
+  <!-- Hamburger -->
+  <button id="menuToggle" class="menu-btn"><i class="bi bi-list"></i></button>
+
+  <!-- Mobile Menu -->
+  <nav id="mobileMenu">
+    <button class="close-btn"><i class="bi bi-x-lg"></i></button>
+    <a href="/about">About Me</a>
+    <a href="https://www.facebook.com/share/1SJCnEcbJJ/?mibextid=wwXIfr">Follow Me</a>
+  </nav>
+
+  <!-- ===== Profile ===== -->
+  <div class="profile">
+    <img class="avatar" src="https://i.imgur.com/JI0C1ze.jpeg" alt="Avatar">
+    <h2>Hi, I am</h2>
+    <h1>Tumadam MOD <img class="verify" src="https://i.imgur.com/McqzSg1.png" alt="verified"></h1>
+    <p><span id="GioiThieu" class="typed-text gradient-text"></span></p>
+    <div class="socials">
+      <a href="https://t.me/tumadam2507" class="icon" target="_blank"><img src="https://i.imgur.com/KLA6K4C.png" alt="Telegram" style="width:30px;height:30px"></a>
+      <a href="https://www.facebook.com/share/1EvYB8LWhY/?mibextid=wwXIfr" class="icon" target="_blank"><img src="https://img.icons8.com/3d-fluency/48/facebook-logo.png" alt="Facebook" style="width:30px;height:30px"></a>
+      <a href="https://youtube.com/@tumadamlengend?si=SM5AvWw4_JSYhFIu" class="icon" target="_blank"><img src="https://i.imgur.com/ceZF8Ur.png" alt="YouTube" style="width:30px;height:30px"></a>
+    </div>
+  </div>
+
+  <!-- ===== Quick links ===== -->
+  <div class="card-list">
+    <div class="link-card"><div class="text">Website Tiện Ích</div><a href="https://tumadammodwebsite.blogspot.com/?m=1" class="btn"><i class="bi bi-box-arrow-up-right"></i></a></div>
+    <div class="link-card"><div class="text">Kho IPA+Game Hack IOS</div><a href="https://tumadammod.github.io/cert/" class="btn"><i class="bi bi-box-arrow-up-right"></i></a></div>
+    <div class="link-card"><div class="text">Telegram Channel</div><a href="https://t.me/tumadammod" class="btn"><i class="bi bi-box-arrow-up-right"></i></a></div>
+  </div>
+
+  <!-- ===== Tải Game ===== -->
+  <section class="section">
+    <h2>Tải Game</h2>
+    
+    <div class="items">
+      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/PKv81pX.jpeg" alt="LQMODSKIN VIP PRO iOS V1">
+          <div class="meta">
+            <div class="title">LQMODSKIN VIP PRO iOS V6</div>
+            <div class="subtitle">Cập Nhật Ngày 27/09</div>
+          </div>
+        </div>
+        <a href="https://tinyurl.com/4b8hyas6" class="action"><i class="bi bi-download"></i></a>
+      </div>
+      
+      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/4A88YOj.jpeg" alt="LQMODSKIN VIP PRO Android V1">
+          <div class="meta">
+            <div class="title">LQMODSKIN VIP PRO Android V2</div>
+            <div class="subtitle">Cập Nhật Ngày 24/8</div>
+          </div>
+        </div>
+        <a href="https://link4sub.com/72Ue" class="action"><i class="bi bi-download"></i></a>
+      </div>
+      
+          <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/GfmAVZI.png" alt="Hack Roblox IOS">
+          <div class="meta">
+            <div class="title">Hack Roblox IOS</div>
+            <div class="subtitle">Auto Update</div>
+          </div>
+        </div>
+        <a href="https://tinyurl.com/krnltumadamt" class="action"><i class="bi bi-download"></i></a>
+      </div>
+      
+            <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/4A88YOj.jpeg" alt="LQMODSKIN VIP PRO Android V1">
+          <div class="meta">
+            <div class="title">Hack Map Android V2</div>
+            <div class="subtitle">Cập Nhật Ngày 24/8</div>
+          </div>
+        </div>
+        <a href="https://link4sub.com/aG6U" class="action"><i class="bi bi-download"></i></a>
+      </div>
+      
+                        <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/PKv81pX.jpeg" alt="IPA Hack Map LQ IOS">
+          <div class="meta">
+            <div class="title">IPA Hack Map LQ IOS No Key V9</div>
+            <div class="subtitle">Cập Nhật Ngày 26/9</div>
+          </div>
+        </div>
+        <a href="https://link4sub.com/Hvze" class="action"><i class="bi bi-download"></i></a>
+      </div>
+      
+                              <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/PKv81pX.jpeg" alt="IPA Hack Map LQ IOS">
+          <div class="meta">
+            <div class="title">IPA Mod LQ IOS No Key </div>
+            <div class="subtitle">Cập Nhật Ngày 21/8</div>
+          </div>
+        </div>
+        <a href="https://link4sub.com/1GGc" class="action"><i class="bi bi-download"></i></a>
+      </div>
+                              <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/PKv81pX.jpeg" alt="IPA Hack Map LQ IOS">
+          <div class="meta">
+            <div class="title">IPA Lulubox IOS No key </div>
+            <div class="subtitle">Cập Nhật Ngày 21/8</div>
+          </div>
+        </div>
+        <a href="https://link4sub.com/btaA" class="action"><i class="bi bi-download"></i></a>
+      </div>
+  </section>
+
+  <!-- ===== Auto Get Key ===== -->
+  <section class="section">
+    <h2>Get Key LQ IOS + Android<i class="bi bi-arrow-repeat spinner"></i></h2>
+    <div class="items">
+      <div class="item">
+        <div class="info">
+          <img src="https://www.iconpacks.net/icons/1/free-key-icon-920-thumb.png" alt="Get Key Chính">
+          <div class="meta">
+            <div class="title">Get Key Chính LQ IOS</div>
+            <div class="subtitle auto-time">Đang tải...</div>
+          </div>
+        </div>
+        <a href="https://authtool.app/get-key/?code=6f20bfc4-d037-4115-9bb6-19968045086e" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+      </div>
+      <div class="item">
+        <div class="info">
+          <img src="https://www.iconpacks.net/icons/1/free-key-icon-920-thumb.png" alt="Get Key Phụ LQ IOS">
+          <div class="meta">
+            <div class="title">Mua Key LQ IOS+Android</div>
+            <div class="subtitle auto-time">Đang tải...</div>
+          </div>
+        </div>
+        <a href="https://t.me/tumadam2507" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+              </div>
+              <div class="item">
+        <div class="info">
+          <img src="https://www.iconpacks.net/icons/1/free-key-icon-920-thumb.png" alt="Get Key Chính LQ Android">
+          <div class="meta">
+            <div class="title">Get Key LQ Android</div>
+            <div class="subtitle auto-time">Đang tải...</div>
+          </div>
+        </div>
+        <a href="https://hackergammer.online/GETKEY/SOIMAPMOD" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+              </div>
+    </div>
+  </section>
+
+  <!-- ===== Tải File Mod ===== -->
+  <section class="section">
+    <h2>Tải File Mod</h2>
+  </section>
+    <div class="items">
+                                     <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/HocDMJw.jpeg" alt="Cách Cài IPA">
+          <div class="meta">
+            <div class="title">Pack 59 Skin LQ</div>
+            <div class="subtitle">Cập Nhật 17/9</div>
+          </div>
+        </div>
+        <a href="https://link4sub.com/gvE9/"class="action"><i class="bi bi-download"></i></a>
+      </div>
+      
+                                   <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/HocDMJw.jpeg" alt="Cách Cài IPA">
+          <div class="meta">
+            <div class="title">Pack 60 Skin LQ</div>
+            <div class="subtitle">Cập Nhật /9</div>
+          </div>
+        </div>
+        <a href="https://youtu.be/xEicC4DHljs?si=Srbhp33wGRam8TXM"class="action"><i class="bi bi-download"></i></a>
+      </div>
+                                           <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/HocDMJw.jpeg" alt="Cách Cài IPA">
+          <div class="meta">
+            <div class="title">Cam Xa LQ</div>
+            <div class="subtitle">Cập Nhật 19/9</div>
+          </div>
+        </div>
+        <a href="https://www.mediafire.com/file/x50d3u9xweclre7/Cam_Xa_LQ_19-9.zip/file"class="action"><i class="bi bi-download"></i></a>
+      </div>
+  <!-- ===== Support Install IPA ===== -->
+  <section class="section">
+    <h2>Support Install IPA</h2>
+    <div class="items">
+      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/2mtR7RK.png" alt="Cách Cài IPA">
+          <div class="meta">
+            <div class="title">Cách Cài IPA</div>
+            <div class="subtitle">Xem Kĩ Để Biết Cài</div>
+          </div>
+        </div>
+        <a href="https://youtu.be/V4ALgNa3KJk?si=mjfUTFm_7YSG1-9X" class="action"><i class="bi bi-download"></i></a>
+      </div>
+      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/ffqC1Xq.png" alt="Website Để Cài IPA">
+          <div class="meta">
+            <div class="title">Website Để Cài IPA</div>
+            <div class="subtitle">Website Cài IPA Ngon Nhất Hiện Tại</div>
+          </div>
+        </div>
+        <a href="https://tumadammod.github.io/cert/" class="action"><i class="bi bi-download"></i></a>
+      </div>
+    </div>
+  </section>
+  
+    <!-- ===== Premium ===== -->
+    <section id="premium" class="section skills-section">
+    <h2>Up App Premium Bằng Shadown Rocket</h2>
+        <div class="items">
+      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/q5oz3as.jpeg" alt="Cách Cài IPA">
+          <div class="meta">
+<div class="title">
+  Hướng Dẫn Dùng ShadowRocket<br>
+  Để Up App Premium
+</div>
+            <div class="subtitle">Xem Kĩ Để Biết Làm</div>
+          </div>
+        </div>
+        <a href="https://youtu.be/HRUsQASz2eg?si=Hd6r0mEdIb01eS7w" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/Q4y1jJh.jpeg" alt="ID Apple Shadown Rocket">
+          <div class="meta">
+<div class="title">
+  ID Apple Shadown Rocket<br>
+</div>
+            <div class="subtitle">Chỉ Log Vô AppStore!!!</div>
+          </div>
+        </div>
+        <a href="https://ccbaohe.com/appleID/" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/jiolduo.png" alt="Module LocketGold">
+          <div class="meta">
+<div class="title">
+  Module LocketGold<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/bv0YjcPC" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/ceZF8Ur.png" alt="Module Youtube Premium">
+          <div class="meta">
+<div class="title">
+  Module Youtube Premium<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/zlL1t" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/suCi3dx.jpeg" alt="Module SoundCloud Go+">
+          <div class="meta">
+<div class="title">
+  Module SoundCloud Go+<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/0PiseHN9" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/qj3pSvC.png" alt="Module Alight Motion Premium">
+          <div class="meta">
+<div class="title">
+  Module Alight Motion Premium<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/CmccXZ" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/A07OcSE.jpeg" alt="Module Wink Vip">
+          <div class="meta">
+<div class="title">
+  Module Wink Vip<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/RlPU5m4" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/gU8d35z.jpeg" alt="Module LightRoom Premium">
+          <div class="meta">
+<div class="title">
+  Module LightRoom Premium<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/tnGSxq3" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/bJTVFXC.png" alt="Module Photoshop Express Premium">
+          <div class="meta">
+<div class="title">
+  Module Photoshop Express Premium<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/XsLXo" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/lWW4fTx.jpeg" alt="Module Oldroll Vip">
+          <div class="meta">
+<div class="title">
+  Module Oldroll Vip<br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/5GU2f3Q" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/jKmb3Ua.jpeg" alt="Module Picsart Premium ">
+          <div class="meta">
+<div class="title">
+  Module Picsart Premium <br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://whatshub.top/module/picsart.module" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/HoNnoX5.jpeg" alt="Module Photomath Plus ">
+          <div class="meta">
+<div class="title">
+  Module Photomath Plus <br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://whatshub.top/module/photomath.module" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/gteswfD.jpeg" alt="Module Nicegram Premium ">
+          <div class="meta">
+<div class="title">
+  Module Nicegram Premium <br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://whatshub.top/module/nicegram.module" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+                                                      <div class="item">
+        <div class="info">
+          <img src="https://i.imgur.com/L7DjJr3.jpeg" alt="Module Spotify Preamium ">
+          <div class="meta">
+<div class="title">
+  Module Spotify Preamium <br>
+</div>
+            <div class="subtitle">Dùng Vĩnh Viễn</div>
+          </div>
+        </div>
+        <a href="https://link4m.com/1N0YyV" class="action"><i class="bi bi-box-arrow-up-right"></i></a>
+                </div>
+  <!-- ===== Skills ===== -->
+  <section id="skills" class="section skills-section">
+    <h2>Skills</h2>
+    <div class="container">
+      <div class="skill"><div class="skill-label">HTML/CSS</div><div class="skill-bar"><div class="skill-fill fill-on-scroll" data-percent="85%" data-color="yellow"></div></div></div>
+      <div class="skill"><div class="skill-label">Lua</div><div class="skill-bar"><div class="skill-fill fill-on-scroll" data-percent="70%" data-color="blue"></div></div></div>
+      <div class="skill"><div class="skill-label">PHP</div><div class="skill-bar"><div class="skill-fill fill-on-scroll" data-percent="20%" data-color="gray"></div></div></div>
+      <div class="skill"><div class="skill-label">MySQL</div><div class="skill-bar"><div class="skill-fill fill-on-scroll" data-percent="15%" data-color="red"></div></div></div>
+    </div>
+  </section>
+
+  <!-- ===== Help Section ===== -->
+<section class="help-section">
+  <div class="help-container">
+    <!-- Link giới thiệu -->
+    <a href="https://www.nguoidanviet.vn/2025/02/truong-van-man-than-dong-lap-trinh-tre-tuoi.html?m=1" class="help-item">
+      <img class="help-icon" src="https://i.imgur.com/osKfZa6.png" alt="Blog">
+      <div class="help-text">Giới thiệu về tôi?</div>
+    </a>
+
+    <!-- Link FAQ -->
+    <a href="https://yourdomain.com/faq" class="help-item">
+      <img class="help-icon" src="https://i.imgur.com/IL4Z54N.png" alt="FAQ">
+      <div class="help-text">Câu hỏi thường gặp?</div>
+    </a>
+  </div>
+</section>
+<!-- ===== Footer ===== -->
+<div class="footer">
+  <p style="margin-top:24px">© 2025 Trương Văn Mẫn</p>
+</div>
+
+<!-- ===== BACKGROUND MUSIC ===== -->
+<audio id="bgMusic" preload="auto"></audio>
+
+<!-- ===== Cảnh báo sau 20h (CSS) ===== -->
+<style>
+  .warning {
+    color: red;
+    font-weight: bold;
+  }
+</style>
+
+<!-- ===== JavaScript ===== -->
+<script>
+  /* Splash scroll lock fix + Typed.js */
+  document.addEventListener('DOMContentLoaded', () => {
+    // Bỏ class loading để cuộn được
+    document.body.classList.remove('loading');
+    const splash = document.getElementById('introSplash');
+    if (splash) {
+      setTimeout(() => {
+        splash.style.display = 'none'; // Ẩn splash sau 2.5s
+      }, 2500);
+    }
+
+    // Hiệu ứng Typed.js
+    new Typed('#GioiThieu', {
+      strings: [
+        'I am Van Man',
+        "and I'm a Developer",
+        'Besides, I am also the top 1 hacker in DakLak :)',
+        'Thank You For Visiting My Website❤️',
+        'Now Explore My Website😘.'
+      ],
+      typeSpeed: 90,
+      backSpeed: 60,
+      loop: true
+    });
+  });
+
+  /* Menu toggle */
+  const btn = document.getElementById('menuToggle'),
+        menu = document.getElementById('mobileMenu'),
+        closeBtn = menu.querySelector('.close-btn');
+  btn.addEventListener('click', () => menu.classList.toggle('open'));
+  closeBtn.addEventListener('click', () => menu.classList.remove('open'));
+
+  /* Skills fill when in view */
+  document.addEventListener('DOMContentLoaded', () => {
+    const fills = document.querySelectorAll('.skill-fill.fill-on-scroll');
+    const io = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.width = entry.target.dataset.percent;
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    fills.forEach(el => io.observe(el));
+  });
+
+  /* Live clock + warning after 8 PM */
+let warningActive = false; // trạng thái cảnh báo
+
+function updateTime() {
+  if (warningActive) return; // nếu đang cảnh báo thì không cập nhật
+  const n = new Date();
+  const str = `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}:${String(n.getSeconds()).padStart(2, '0')} ${String(n.getDate()).padStart(2, '0')}/${String(n.getMonth() + 1).padStart(2, '0')}/${n.getFullYear()}`;
+  document.querySelectorAll('.auto-time').forEach(el => el.textContent = str);
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+
+function startWarningLoop() {
+  const now = new Date();
+  const hour = now.getHours();
+
+  if (hour >= 20) {
+    const targets = document.querySelectorAll('.auto-time');
+
+    targets.forEach(el => {
+      const original = el.textContent;
+      warningActive = true;
+
+      el.textContent = '⚠️Đã 8 Giờ Tối Nếu Link Chính Lỗi Vui Lòng Vượt Link Phụ!!!';
+      el.classList.add('warning');
+
+      setTimeout(() => {
+        el.textContent = original;
+        el.classList.remove('warning');
+        warningActive = false;
+      }, 7000); // cảnh báo trong 5 giây
+    });
+  }
+
+  setTimeout(startWarningLoop, 15000); // lặp lại sau 15 giây
+}
+
+startWarningLoop();
+
+  /* ===== MUSIC PLAYER ===== */
+  const playlist = [
+    'https://files.catbox.moe/c3eohl.mp3',
+    'https://files.catbox.moe/0qymfn.mp3',
+    'https://files.catbox.moe/d7xy88.mp3'
+  ];
+
+  const audio = document.getElementById('bgMusic');
+  let idx = 0;
+
+  audio.src = playlist[idx];
+  audio.volume = 0.6;
+  audio.autoplay = true;
+
+  audio.addEventListener('ended', () => {
+    idx = (idx + 1) % playlist.length;
+    audio.src = playlist[idx];
+    audio.play();
+  });
+
+  /* Autoplay fallback on first gesture */
+  const resume = () => {
+    if (audio.paused) audio.play().catch(() => {});
+    window.removeEventListener('click', resume);
+    window.removeEventListener('touchstart', resume);
+  };
+  window.addEventListener('click', resume);
+  window.addEventListener('touchstart', resume);
+</script>
+<script type='text/javascript' src='//pl26947935.profitableratecpm.com/a3/ff/2e/a3ff2eb3e4415ce00aed34eeedefbeee.js'></script>
+</body>
+</html>
