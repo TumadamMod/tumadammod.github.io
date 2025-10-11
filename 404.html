@@ -126,5 +126,12 @@
       document.body.appendChild(star);
     }
   </script>
+  <script>
+  // Tự động redirect nếu người dùng gõ link kiểu có /
+  if (window.location.pathname.endsWith('/')) {
+    const fixed = window.location.pathname.slice(0, -1);
+    window.location.href = fixed;
+  }
+</script>
 </body>
 </html>
