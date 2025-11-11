@@ -613,46 +613,6 @@
     fills.forEach(el => io.observe(el));
   });
 
-  /* Live clock + warning after 8 PM */
-let warningActive = false; // trạng thái cảnh báo
-
-function updateTime() {
-  if (warningActive) return; // nếu đang cảnh báo thì không cập nhật
-  const n = new Date();
-  const str = `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}:${String(n.getSeconds()).padStart(2, '0')} ${String(n.getDate()).padStart(2, '0')}/${String(n.getMonth() + 1).padStart(2, '0')}/${n.getFullYear()}`;
-  document.querySelectorAll('.auto-time').forEach(el => el.textContent = str);
-}
-
-updateTime();
-setInterval(updateTime, 1000);
-
-function startWarningLoop() {
-  const now = new Date();
-  const hour = now.getHours();
-
-  if (hour >= 20) {
-    const targets = document.querySelectorAll('.auto-time');
-
-    targets.forEach(el => {
-      const original = el.textContent;
-      warningActive = true;
-
-      el.textContent = '⚠️Đã 8 Giờ Tối Nếu Link Chính Lỗi Vui Lòng Vượt Link Phụ!!!';
-      el.classList.add('warning');
-
-      setTimeout(() => {
-        el.textContent = original;
-        el.classList.remove('warning');
-        warningActive = false;
-      }, 7000); // cảnh báo trong 5 giây
-    });
-  }
-
-  setTimeout(startWarningLoop, 15000); // lặp lại sau 15 giây
-}
-
-startWarningLoop();
-
   /* ===== MUSIC PLAYER ===== */
   const playlist = [
     'https://files.catbox.moe/c3eohl.mp3',
