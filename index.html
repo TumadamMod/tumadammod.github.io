@@ -127,10 +127,80 @@
   font-weight: 500;
   color: #555;
 }
+/* ===== Android Arch Popup ===== */
+.arch-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:4000;
+}
+
+.arch-overlay.show{display:flex}
+
+.arch-box{
+  background:#fff;
+  width:90%;
+  max-width:320px;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+  animation:pop .25s ease;
+}
+
+.arch-box h3{
+  font-size:18px;
+  margin-bottom:6px;
+}
+
+.arch-box p{
+  font-size:14px;
+  color:#666;
+}
+
+.arch-actions{
+  display:flex;
+  gap:12px;
+  margin:18px 0;
+}
+
+.arch-btn{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  background:#4dabf7;
+  color:#fff;
+  font-weight:600;
+}
+
+.arch-btn.gray{background:#6c757d}
+
+.arch-cancel{
+  border:none;
+  background:none;
+  color:#999;
+  font-size:14px;
+}
   </style>
 </head>
 
 <body class="loading">
+<!-- ===== Android Select Arch ===== -->
+<div id="androidArch" class="arch-overlay">
+  <div class="arch-box">
+    <h3>Máy bạn dùng bản nào?</h3>
+    <p>Vui lòng chọn đúng kiến trúc Android</p>
+
+    <div class="arch-actions">
+      <a id="apk64" class="arch-btn">📱 64 BIT</a>
+      <a id="apk32" class="arch-btn gray">📱 32 BIT</a>
+    </div>
+
+    <button class="arch-cancel">Huỷ</button>
+  </div>
+</div>
 
   <!-- Splash Intro -->
   <div id="introSplash">
@@ -203,7 +273,12 @@
             <div class="subtitle">Cập Nhật 22/1</div>
           </div>
         </div>
-        <a href="https://github.com/TumadamMod/unlockskinandroid/releases/download/andr/HACKAOVANDR.apk" class="action"><i class="bi bi-download"></i></a>
+<a href="javascript:void(0)"
+   class="action android-btn"
+   data-64="https://github.com/TumadamMod/unlockskinandroid/releases/download/andr/hackmapandr64bit.apk"
+   data-32="https://github.com/TumadamMod/unlockskinandroid/releases/download/andr/HACKAOVANDR.apk">
+   <i class="bi bi-download"></i>
+</a>
       </div>
                                             <div class="item">
         <div class="info">
@@ -213,7 +288,12 @@
             <div class="subtitle">Cập Nhật 22/1</div>
           </div>
         </div>
-        <a href="https://github.com/TumadamMod/unlockskinandroid/releases/download/andr/MODSKINAOV.apk" class="action"><i class="bi bi-download"></i></a>
+<a href="javascript:void(0)"
+   class="action android-btn"
+   data-64="https://github.com/TumadamMod/unlockskinandroid/releases/download/andr/ModSkin64bitAnsr.apk"
+   data-32="https://github.com/TumadamMod/unlockskinandroid/releases/download/andr/MODSKINAOV.apk">
+   <i class="bi bi-download"></i>
+</a>
       </div>
                                 <div class="item">
         <div class="info">
@@ -661,6 +741,26 @@
   };
   window.addEventListener('click', resume);
   window.addEventListener('touchstart', resume);
+</script>
+<script>
+  const popup = document.getElementById('androidArch');
+  const apk64 = document.getElementById('apk64');
+  const apk32 = document.getElementById('apk32');
+
+  document.querySelectorAll('.android-btn').forEach(btn=>{
+    btn.onclick = ()=>{
+      apk64.href = btn.dataset['64'];
+      apk32.href = btn.dataset['32'];
+      popup.classList.add('show');
+    };
+  });
+
+  popup.onclick = e=>{
+    if(e.target.classList.contains('arch-overlay') ||
+       e.target.classList.contains('arch-cancel')){
+      popup.classList.remove('show');
+    }
+  };
 </script>
 </body>
 </html>
