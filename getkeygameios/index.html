@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Key - LQM iOS</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+  :root {
+    --bg-color: #F2F2F7;
+    --card-bg: #FFFFFF;
+    --text-primary: #000000;
+    --text-secondary: #8E8E93;
+    --separator: rgba(60, 60, 67, 0.15);
+    --active-bg: #E5E5EA;
+    --btn-blue: #007AFF;
+    --btn-blue-tint: rgba(0, 122, 255, 0.12);
+    --orange: #FF9500;
+    --orange-tint: rgba(255, 149, 0, 0.14);
+    --green: #34C759;
+    --red: #FF3B30;
+    --blue-icon: #24A1DE;
+    --modal-bg: rgba(242, 242, 247, 0.95);
+    --modal-overlay: rgba(0, 0, 0, 0.4);
+    --btn-shadow: 0 4px 14px rgba(0, 122, 255, 0.2);
+    --theme-btn-bg: #FFFFFF;
+  }
+
+  body.dark-mode {
+    --bg-color: #000000;
+    --card-bg: #1C1C1E;
+    --text-primary: #FFFFFF;
+    --text-secondary: rgba(235, 235, 245, 0.6);
+    --separator: rgba(84, 84, 88, 0.65);
+    --active-bg: #3A3A3C;
+    --btn-blue: #0A84FF;
+    --btn-blue-tint: rgba(10, 132, 255, 0.18);
+    --orange: #FF9F0A;
+    --orange-tint: rgba(255, 159, 10, 0.18);
+    --green: #32D74B;
+    --red: #FF453A;
+    --modal-bg: rgba(28, 28, 30, 0.95);
+    --modal-overlay: rgba(0, 0, 0, 0.7);
+    --btn-shadow: 0 4px 14px rgba(10, 132, 255, 0.25);
+    --theme-btn-bg: #2C2C2E;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  body {
+    background-color: var(--bg-color);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 22px 14px;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+  }
+
+  .ios-container { width: 100%; max-width: 400px; margin: 0 auto; }
+
+  /* ===== NÚT ĐỔI THEME ===== */
+  .theme-toggle-btn {
+    position: absolute; top: 14px; right: 14px;
+    width: 38px; height: 38px; border-radius: 50%;
+    background-color: var(--theme-btn-bg); color: var(--text-primary);
+    border: none; font-size: 16px; display: flex; justify-content: center; align-items: center;
+    cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s;
+    z-index: 100; opacity: 0;
+    animation: dropDownSpring 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards 0.2s;
+  }
+  @keyframes dropDownSpring {
+    0% { opacity: 0; transform: translateY(-30px) scale(0.8); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .theme-toggle-btn:active { transform: scale(0.85) !important; }
+
+  /* ===== ANIMATION XUẤT HIỆN ===== */
+  .pop-in { opacity: 0; animation: springPop 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+  .delay-1 { animation-delay: 0.05s; } .delay-2 { animation-delay: 0.10s; }
+  .delay-3 { animation-delay: 0.15s; } .delay-4 { animation-delay: 0.20s; }
+  .delay-5 { animation-delay: 0.25s; } .delay-6 { animation-delay: 0.30s; }
+  @keyframes springPop {
+    0% { opacity: 0; transform: translateY(28px) scale(0.92); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; animation-delay: 0s !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ===== HEADER GỌN ===== */
+  .header-group { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 6px 0 18px; }
+  .glow-wrapper {
+    position: relative; width: 40px; height: 40px; border-radius: 10px;
+    display: flex; justify-content: center; align-items: center; flex-shrink: 0; z-index: 1;
+  }
+  .glow-wrapper::before {
+    content: ""; position: absolute; inset: -3px; border-radius: 13px;
+    background: linear-gradient(130deg,#38c8ff,#8f46ff,#ff3873,#ff8b33,#38c8ff);
+    background-size: 300% 300%; z-index: -1; filter: blur(7px); opacity: 0.85;
+    animation: appleGlow 3s linear infinite;
+  }
+  @keyframes appleGlow {
+    0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }
+  }
+  .header-icon {
+    width: 100%; height: 100%; border-radius: 10px; object-fit: cover;
+    z-index: 2; background-color: var(--card-bg); transition: background-color 0.4s ease;
+  }
+  h1 {
+    font-size: 20px; font-weight: 800; color: var(--text-primary); line-height: 1.2;
+    opacity: 0; animation: textRunOut 0.7s cubic-bezier(0.34,1.56,0.64,1) forwards 0.1s;
+    transition: color 0.4s ease;
+  }
+  @keyframes textRunOut {
+    0% { opacity: 0; transform: translateX(-60px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+
+  /* ===== TIÊU ĐỀ SECTION + PROGRESS ===== */
+  .section-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    text-transform: uppercase; letter-spacing: 0.3px;
+    margin: 0 14px 6px; transition: color 0.4s ease;
+  }
+  .progress-track {
+    width: 100%; height: 5px; background-color: var(--separator);
+    border-radius: 3px; overflow: hidden; margin-bottom: 10px;
+    transition: background-color 0.4s ease;
+  }
+  .progress-fill {
+    height: 100%; width: 0%; background-color: var(--btn-blue); border-radius: 3px;
+    transition: width 0.4s cubic-bezier(0.25,0.1,0.25,1), background-color 0.4s ease;
+  }
+
+  /* ===== DANH SÁCH NHIỆM VỤ ===== */
+  .ios-list {
+    background-color: var(--card-bg); border-radius: 14px; overflow: hidden;
+    margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    transition: background-color 0.4s ease;
+  }
+  .ios-list-item {
+    display: flex; align-items: center; width: 100%; padding: 12px 14px;
+    background: transparent; border: none; text-align: left; font-size: 15px;
+    cursor: pointer; transition: background-color 0.15s; position: relative;
+  }
+  .ios-list-item:active:not(:disabled) { background-color: var(--active-bg); }
+  .ios-list-item:disabled { cursor: not-allowed; }
+  .ios-list-item:not(:last-child)::after {
+    content: ""; position: absolute; bottom: 0; left: 56px; right: 0;
+    height: 0.5px; background-color: var(--separator); transition: background-color 0.4s ease;
+  }
+  .icon-box {
+    width: 30px; height: 30px; border-radius: 8px;
+    display: flex; justify-content: center; align-items: center;
+    color: white; font-size: 15px; margin-right: 12px; flex-shrink: 0;
+    transition: opacity 0.3s ease;
+  }
+  .bg-youtube  { background-color: var(--red); }
+  .bg-telegram { background-color: var(--blue-icon); }
+  .bg-tiktok   { background-color: #010101; }
+  .bg-discord  { background-color: #5865F2; }
+
+  .item-text { flex-grow: 1; color: var(--text-primary); font-weight: 600; transition: color 0.4s ease; }
+  .item-status { color: var(--text-secondary); font-size: 13px; margin-right: 8px; transition: color 0.4s ease; }
+  .item-chevron { color: var(--text-secondary); font-size: 13px; opacity: 0.6; transition: color 0.4s ease; }
+  .ios-list-item.done .icon-box { opacity: 0.4; }
+  .ios-list-item.done .item-text { color: var(--green); opacity: 0.7; }
+  .ios-list-item.done .item-chevron { color: var(--green); opacity: 0.7; }
+
+  /* ===== 3 NÚT MỞ KHOÁ ===== */
+  .btn-unlock {
+    width: 100%; border: none; border-radius: 12px; padding: 13px;
+    font-size: 15px; font-weight: 600; margin-bottom: 10px;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+    background-color: var(--active-bg); color: var(--text-secondary);
+    cursor: not-allowed; transition: all 0.3s ease;
+  }
+  /* FIX: thêm opacity:1 — vì .active ghi đè animation của .pop-in,
+     làm mất springPop đang giữ opacity, nút rơi về opacity:0 và "tàng hình" */
+  .btn-unlock.active { cursor: pointer; opacity: 1; animation: pulseOnce 0.6s ease 1; }
+  .btn-unlock.active:active { transform: scale(0.97); }
+  .btn-unlock.style-main.active { background-color: var(--btn-blue); color: #fff; box-shadow: var(--btn-shadow); }
+  .btn-unlock.style-tint.active { background-color: var(--btn-blue-tint); color: var(--btn-blue); }
+  .btn-unlock.style-ads.active  { background-color: var(--orange-tint); color: var(--orange); }
+  @keyframes pulseOnce {
+    0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); }
+  }
+
+  /* ===== VIDEO HƯỚNG DẪN ===== */
+  .help-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 16px; margin-top: 14px; }
+  .help-btn-ads { flex-basis: 100%; justify-content: center; }
+  .help-btn {
+    background: none; border: none; color: var(--btn-blue); font-size: 13px;
+    font-weight: 500; cursor: pointer; display: flex; align-items: center;
+    gap: 6px; transition: color 0.4s ease;
+  }
+  .help-btn:active { opacity: 0.5; }
+
+  /* ===== MODAL VIDEO ===== */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background-color: var(--modal-overlay); z-index: 9999;
+    justify-content: center; align-items: center; padding: 20px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .modal-content {
+    width: 100%; max-width: 400px; background: var(--modal-bg);
+    border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
+    animation: zoomIn 0.3s cubic-bezier(0.175,0.885,0.32,1.1);
+  }
+  @keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .video-container { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
+  .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .modal-close-btn {
+    background-color: transparent; color: var(--btn-blue); border: none;
+    border-top: 0.5px solid var(--separator); padding: 15px; font-size: 16px;
+    font-weight: 600; cursor: pointer;
+  }
+  .modal-close-btn:active { background-color: var(--active-bg); }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle-btn" id="themeToggleBtn">
+  <i class="fa-solid fa-moon" id="themeIcon"></i>
+</button>
+
+<div class="ios-container">
+
+  <div class="header-group">
+    <div class="glow-wrapper pop-in delay-1">
+      <img src="https://play-lh.googleusercontent.com/gU0rhVqaGc8l1rV_cwmopYrn1J97S1t1kddMu-QE42M4tmzupO44lyIhAlTXF7PbQ5wFk9j6n9uLZc1R9_HV=w480-h960" alt="Game Logo" class="header-icon">
+    </div>
+    <h1>Get Key LQM iOS</h1>
+  </div>
+
+  <div class="section-head pop-in delay-2">
+    <span>Nhiệm vụ</span>
+    <span id="progressText">0 / 4</span>
+  </div>
+  <div class="progress-track pop-in delay-2">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+
+  <div class="ios-list pop-in delay-3">
+    <button class="ios-list-item" id="task1" onclick="completeTask(1, 'https://discord.gg/tumadam')">
+      <div class="icon-box bg-discord"><i class="fa-brands fa-discord"></i></div>
+      <span class="item-text">Tham Gia Discord</span>
+      <span class="item-status" id="status-task1"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task1"></i>
+    </button>
+
+    <button class="ios-list-item" id="task2" disabled onclick="completeTask(2, 'https://www.tiktok.com/@vanman250710')">
+      <div class="icon-box bg-tiktok">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/>
+        </svg>
+      </div>
+      <span class="item-text">Follow TikTok</span>
+      <span class="item-status" id="status-task2"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task2"></i>
+    </button>
+
+    <button class="ios-list-item" id="task3" disabled onclick="completeTask(3, 'https://youtube.com/@ntmoba1265')">
+      <div class="icon-box bg-youtube"><i class="fa-brands fa-youtube"></i></div>
+      <span class="item-text">Đăng Ký Kênh YouTube</span>
+      <span class="item-status" id="status-task3"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task3"></i>
+    </button>
+
+    <button class="ios-list-item" id="task4" disabled onclick="completeTask(4, 'https://t.me/tumadammod1')">
+      <div class="icon-box bg-telegram"><i class="fa-brands fa-telegram"></i></div>
+      <span class="item-text">Vào nhóm Telegram</span>
+      <span class="item-status" id="status-task4"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task4"></i>
+    </button>
+  </div>
+
+  <div class="section-head pop-in delay-4"><span>Mở khoá key</span></div>
+
+  <button class="btn-unlock style-main pop-in delay-4" id="unlockBtn1" disabled onclick="goUnlock('main')">
+    <i class="fa-solid fa-lock" id="unlockIcon1"></i> Mở khoá Link Chính
+  </button>
+
+  <button class="btn-unlock style-tint pop-in delay-5" id="unlockBtn2" disabled onclick="goUnlock('backup')">
+    <i class="fa-solid fa-lock" id="unlockIcon2"></i> Link Phụ (nếu Chính lỗi)
+  </button>
+
+  <button class="btn-unlock style-ads pop-in delay-5" id="unlockBtn3" disabled onclick="goUnlock('ads')">
+    <i class="fa-solid fa-lock" id="unlockIcon3"></i> Link Ads (vượt quảng cáo)
+  </button>
+
+  <div class="help-links pop-in delay-6">
+    <button class="help-btn" onclick="openVideo(HD_VIDEOS.main)">
+      <i class="fa-solid fa-circle-play"></i> Hướng dẫn vượt Link Chính
+    </button>
+    <button class="help-btn" onclick="openVideo(HD_VIDEOS.backup)">
+      <i class="fa-solid fa-circle-play"></i> HD Vượt Link Phụ
+    </button>
+    <button class="help-btn help-btn-ads" onclick="openVideo(HD_VIDEOS.ads)">
+      <i class="fa-solid fa-circle-play"></i> HD Vượt link Quảng cáo
+    </button>
+  </div>
+
+</div>
+
+<div id="videoModal" class="modal-overlay" onclick="if(event.target===this)closeVideo()">
+  <div class="modal-content">
+    <div class="video-container">
+      <iframe id="youtubeIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <button class="modal-close-btn" onclick="closeVideo()">Xong</button>
+  </div>
+</div>
+
+<script>
+/* ================= CẤU HÌNH LINK (sửa tại đây) ================= */
+const UNLOCK_LINKS = {
+  main:   'https://authtool.app/get-key?code=1bf10e70-67c3-4d06-b8ea-616806d60173',
+  backup: 'https://authtool.app/get-key?code=60983695-9377-406f-a63a-0d58425512f5',
+  ads:    'https://authtool.app/get-key?code=a9cfad07-ba38-4179-838a-d7786f69754b'   // <-- ads
+};
+
+const HD_VIDEOS = {
+  main:   'https://pub-8851b5874408441f85670cfe38ce6aa7.r2.dev/video%20hd/copy_D9B62E8E-EDE2-422A-BFA6-266509F30DA8.mov',
+  backup: 'https://pub-8851b5874408441f85670cfe38ce6aa7.r2.dev/video%20hd/copy_2EE117BF-E6DA-4062-9D5C-32CDF36812C8.mov',
+  ads:    'https://cdn.tumadam.com/files/91fb6774-04bb-4a64-8a8e-0ee5d688c9e5.mov'  // <-- video HD vượt link ads
+};
+/* =============================================================== */
+
+function goUnlock(key) {
+  location.href = UNLOCK_LINKS[key];
+}
+
+/* ===== AUTO RELOAD KHI VÀO LẠI TRANG (fix BFCache iOS Safari) ===== */
+window.addEventListener('pageshow', function (e) {
+  const nav = performance.getEntriesByType('navigation')[0];
+  if (e.persisted || (nav && nav.type === 'back_forward')) {
+    location.reload();
+  }
+});
+
+/* ===== THEME ===== */
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+
+function getSavedTheme() { try { return localStorage.getItem('user-theme'); } catch (e) { return null; } }
+function saveTheme(v)    { try { localStorage.setItem('user-theme', v); } catch (e) {} }
+
+function setTheme(isDark) {
+  if (isDark) {
+    document.body.classList.add('dark-mode');
+    themeIcon.className = 'fa-solid fa-sun';
+    themeIcon.style.color = '#FDB813';
+  } else {
+    document.body.classList.remove('dark-mode');
+    themeIcon.className = 'fa-solid fa-moon';
+    themeIcon.style.color = '#333';
+  }
+}
+function isNight() { const h = new Date().getHours(); return h >= 18 || h < 6; }
+
+const savedTheme = getSavedTheme();
+setTheme(savedTheme ? savedTheme === 'dark' : isNight());
+
+themeToggleBtn.addEventListener('click', () => {
+  const dark = !document.body.classList.contains('dark-mode');
+  setTheme(dark);
+  saveTheme(dark ? 'dark' : 'light');
+});
+
+/* ===== NHIỆM VỤ ===== */
+let completedSteps = 0;
+const TOTAL_STEPS = 4;
+
+function completeTask(step, url) {
+  window.open(url, '_blank');
+  const btn = document.getElementById('task' + step);
+  const statusSpan = document.getElementById('status-task' + step);
+  const iconRight = document.getElementById('icon-task' + step);
+  btn.disabled = true;
+
+  let countdown = 3;
+  statusSpan.textContent = 'Chờ ' + countdown + 's';
+  const timer = setInterval(() => {
+    countdown--;
+    if (countdown > 0) {
+      statusSpan.textContent = 'Chờ ' + countdown + 's';
+    } else {
+      clearInterval(timer);
+      btn.classList.add('done');
+      statusSpan.textContent = '';
+      iconRight.className = 'fa-solid fa-check item-chevron';
+      completedSteps++;
+      document.getElementById('progressText').textContent = completedSteps + ' / ' + TOTAL_STEPS;
+      document.getElementById('progressFill').style.width = (completedSteps / TOTAL_STEPS) * 100 + '%';
+
+      if (step < TOTAL_STEPS) {
+        document.getElementById('task' + (step + 1)).disabled = false;
+      } else {
+        [1, 2, 3].forEach(num => {
+          const unlockBtn = document.getElementById('unlockBtn' + num);
+          if (unlockBtn) {
+            unlockBtn.disabled = false;
+            unlockBtn.classList.add('active');
+            document.getElementById('unlockIcon' + num).className = 'fa-solid fa-lock-open';
+          }
+        });
+      }
+    }
+  }, 1000);
+}
+
+/* ===== MODAL VIDEO ===== */
+function openVideo(videoUrl) {
+  document.getElementById('youtubeIframe').src = videoUrl + '?autoplay=1';
+  document.getElementById('videoModal').style.display = 'flex';
+}
+function closeVideo() {
+  document.getElementById('videoModal').style.display = 'none';
+  document.getElementById('youtubeIframe').src = '';
+}
+</script>
+<script src="https://pl29364732.effectivecpmnetwork.com/da/f6/98/daf6987d6edbf3e0420f161c4ad5fb78.js"></script>
+
+
+</body>
+</html>
