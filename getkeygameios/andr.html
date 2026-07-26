@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Get Key - LQM Android</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --bg-color: #F0F4F0; --card-bg: #FFFFFF; --text-primary: #191C1A;
+    --text-secondary: #404943; --separator: #E0E4E0; --active-bg: #E8F0E8;
+    --btn-main: #2E7D32; --btn-main-disabled: #A5D6A7; --btn-done: #388E3C;
+    --red: #D32F2F; --blue-icon: #0288D1; --modal-bg: #FFFFFF;
+    --modal-overlay: rgba(0,0,0,0.5); --btn-shadow: 0 4px 12px rgba(46,125,50,0.25);
+    --theme-btn-bg: #FFFFFF; --card-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  }
+  body.dark-mode {
+    --bg-color: #121412; --card-bg: #1E201E; --text-primary: #E1E3E0;
+    --text-secondary: #8B938C; --separator: #3F4943; --active-bg: #2D312E;
+    --btn-main: #4CAF50; --btn-main-disabled: rgba(76,175,80,0.3); --btn-done: #66BB6A;
+    --red: #EF5350; --blue-icon: #29B6F6; --modal-bg: #1E201E;
+    --modal-overlay: rgba(0,0,0,0.7); --btn-shadow: 0 4px 12px rgba(76,175,80,0.2);
+    --theme-btn-bg: #2D312E; --card-shadow: 0 2px 10px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background-color: var(--bg-color);
+    font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    display: flex; justify-content: center; align-items: flex-start;
+    min-height: 100vh; padding: 30px 20px;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    position: relative; overflow-x: hidden;
+  }
+  .android-container { width: 100%; max-width: 420px; margin: 0 auto; margin-top: 10px; }
+
+  .theme-toggle-btn {
+    position: absolute; top: 20px; right: 20px; width: 44px; height: 44px;
+    border-radius: 50%; background-color: var(--theme-btn-bg); color: var(--text-primary);
+    border: none; font-size: 18px; display: flex; justify-content: center; align-items: center;
+    cursor: pointer; box-shadow: var(--card-shadow);
+    transition: background-color 0.4s ease, color 0.4s ease, transform 0.2s;
+    z-index: 100; opacity: 0;
+    animation: dropDownSpring 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards 0.3s;
+  }
+  @keyframes dropDownSpring {
+    0% { opacity: 0; transform: translateY(-40px) scale(0.8); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .theme-toggle-btn:active { transform: scale(0.85) !important; }
+
+  .pop-in { opacity: 0; animation: springPop 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+  .delay-1{animation-delay:.1s} .delay-2{animation-delay:.15s} .delay-3{animation-delay:.2s}
+  .delay-4{animation-delay:.25s} .delay-5{animation-delay:.3s} .delay-6{animation-delay:.35s}
+  .delay-7{animation-delay:.4s} .delay-8{animation-delay:.45s}
+  @keyframes springPop {
+    0% { opacity: 0; transform: translateY(35px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .greeting-container {
+    height: 40px; position: relative; display: flex;
+    justify-content: center; align-items: center; margin-bottom: 10px;
+  }
+  .greeting-text {
+    font-size: 20px; font-weight: 800; color: var(--text-primary);
+    position: absolute; opacity: 0;
+    animation: textRunOutGreeting 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+  }
+  @keyframes textRunOutGreeting {
+    0% { opacity: 0; transform: translateX(-100px); letter-spacing: -2px; }
+    100% { opacity: 1; transform: translateX(0); letter-spacing: 0.5px; }
+  }
+  .clock-widget {
+    font-size: 16px; font-weight: 700; color: var(--btn-main);
+    background-color: var(--active-bg); padding: 6px 16px; border-radius: 20px;
+    position: absolute; display: none; opacity: 0; box-shadow: var(--card-shadow);
+  }
+  .slide-up-fade { animation: slideUpFade 0.5s forwards; }
+  @keyframes slideUpFade { to { opacity: 0; transform: translateY(-20px) scale(0.9); } }
+  .slide-up-enter { animation: slideUpEnter 0.5s forwards; }
+  @keyframes slideUpEnter {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .header-group { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 30px; }
+  .glow-wrapper {
+    position: relative; width: 48px; height: 48px; border-radius: 12px;
+    display: flex; justify-content: center; align-items: center;
+    background: transparent; z-index: 1; flex-shrink: 0;
+  }
+  .glow-wrapper::before {
+    content: ""; position: absolute; inset: -4px; border-radius: 16px;
+    background: linear-gradient(130deg,#4CAF50,#00BCD4,#8BC34A,#0288D1,#4CAF50);
+    background-size: 300% 300%; z-index: -1; filter: blur(8px); opacity: 0.9;
+    animation: androidGlow 3s linear infinite;
+  }
+  @keyframes androidGlow {
+    0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%}
+  }
+  .header-icon {
+    width: 100%; height: 100%; border-radius: 12px; object-fit: cover;
+    z-index: 2; background-color: var(--card-bg); transition: background-color 0.4s ease;
+  }
+  h1 {
+    font-size: 24px; font-weight: 800; color: var(--text-primary);
+    text-align: center; line-height: 1.2; opacity: 0;
+    animation: textRunOut 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards;
+    animation-delay: 0.15s; transition: color 0.4s ease;
+  }
+  @keyframes textRunOut {
+    0% { opacity: 0; transform: translateX(-80px); }
+    100% { opacity: 1; transform: translateX(0); }
+  }
+  .apple-logo { padding: 6px; transition: filter 0.4s ease, background-color 0.4s ease; }
+  body.dark-mode .apple-logo { filter: invert(1); }
+
+  .list-title {
+    font-size: 14px; color: var(--text-secondary); font-weight: 600;
+    margin-bottom: 12px; margin-left: 4px; transition: color 0.4s ease;
+  }
+  .android-list-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
+  .android-list-item {
+    display: flex; align-items: center; width: 100%; padding: 16px;
+    background-color: var(--card-bg); border: none; border-radius: 16px;
+    text-align: left; font-size: 16px; cursor: pointer;
+    box-shadow: var(--card-shadow); transition: all 0.2s ease;
+  }
+  .android-list-item:active:not(:disabled) { transform: scale(0.98); background-color: var(--active-bg); }
+  .android-list-item:disabled { cursor: not-allowed; opacity: 0.8; }
+
+  .icon-box {
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    color: white; font-size: 16px; margin-right: 14px; flex-shrink: 0;
+    transition: opacity 0.3s ease, background-color 0.4s ease;
+  }
+
+  /* ===== ICON COLORS ===== */
+  .bg-youtube  { background-color: var(--red); }
+  .bg-telegram { background-color: var(--blue-icon); }
+  .bg-tiktok   { background-color: #010101; }
+  .bg-discord  { background-color: #5865F2; }
+
+  .item-text { flex-grow: 1; color: var(--text-primary); font-weight: 600; transition: color 0.4s ease; }
+  .item-status { color: var(--text-secondary); font-size: 14px; margin-right: 8px; transition: color 0.4s ease; }
+  .item-chevron { color: var(--text-secondary); font-size: 14px; opacity: 0.6; transition: color 0.4s ease; }
+  .android-list-item.done .icon-box { background-color: var(--btn-done); }
+  .android-list-item.done .item-text { color: var(--btn-done); }
+  .android-list-item.done .item-chevron { color: var(--btn-done); opacity: 1; }
+
+  .progress-container {
+    margin: 0 4px 25px 4px; background-color: var(--card-bg);
+    padding: 16px; border-radius: 16px; box-shadow: var(--card-shadow);
+    transition: background-color 0.4s ease;
+  }
+  .progress-info {
+    display: flex; justify-content: space-between; font-size: 14px; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 12px; transition: color 0.4s ease;
+  }
+  .progress-track {
+    width: 100%; height: 8px; background-color: var(--separator);
+    border-radius: 4px; overflow: hidden; transition: background-color 0.4s ease;
+  }
+  .progress-fill {
+    height: 100%; width: 0%; background-color: var(--btn-main); border-radius: 4px;
+    transition: width 0.4s cubic-bezier(0.25,0.1,0.25,1), background-color 0.4s ease;
+  }
+
+  .btn-unlock-wrapper { width: 100%; }
+  .btn-unlock {
+    width: 100%; background-color: var(--btn-main-disabled); color: white;
+    border: none; border-radius: 16px; padding: 18px; font-size: 17px; font-weight: 700;
+    margin-bottom: 14px; cursor: not-allowed; transition: all 0.3s ease;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+  }
+  .btn-unlock.active { background-color: var(--btn-main); cursor: pointer; box-shadow: var(--btn-shadow); }
+  .btn-unlock.active:active { transform: scale(0.97); }
+
+  .help-links { display: flex; justify-content: center; gap: 20px; margin-top: 25px; }
+  .help-btn {
+    background: none; border: none; color: var(--btn-main); font-size: 15px; font-weight: 600;
+    cursor: pointer; display: flex; align-items: center; gap: 6px; transition: color 0.4s ease;
+  }
+  .help-btn:active { opacity: 0.6; transform: scale(0.95); }
+
+  .modal-overlay {
+    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--modal-overlay); z-index: 9999;
+    justify-content: center; align-items: center; padding: 20px;
+    backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+  }
+  .modal-content {
+    width: 100%; max-width: 420px; background: var(--modal-bg);
+    border-radius: 20px; overflow: hidden; display: flex; flex-direction: column;
+    animation: zoomIn 0.3s cubic-bezier(0.175,0.885,0.32,1.1);
+  }
+  @keyframes zoomIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  .video-container { position: relative; padding-bottom: 56.25%; height: 0; background: #000; }
+  .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+  .modal-close-btn {
+    background-color: transparent; color: var(--btn-main); border: none;
+    padding: 18px; font-size: 16px; font-weight: 700; cursor: pointer;
+    transition: background-color 0.4s ease;
+  }
+  .modal-close-btn:active { background-color: var(--active-bg); }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle-btn" id="themeToggleBtn">
+  <i class="fa-solid fa-moon" id="themeIcon"></i>
+</button>
+
+<div class="android-container">
+  <div class="greeting-container">
+    <div id="greetingText" class="greeting-text"></div>
+    <div id="clockWidget" class="clock-widget"></div>
+  </div>
+
+  <div class="header-group">
+    <div class="glow-wrapper pop-in delay-1">
+      <img src="https://ipas.cc/_next/image?url=https%3A%2F%2Fdl.ipas.cc%2Ficons%2F1779284211204-IMG_7418.jpeg&w=384&q=75" alt="Game Logo" class="header-icon">
+    </div>
+    <h1>Get Key LQM<br>ANDROID</h1>
+    <div class="glow-wrapper pop-in delay-2">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" alt="Android Logo" class="header-icon apple-logo">
+    </div>
+  </div>
+
+  <div class="list-title pop-in delay-3">Nhiệm vụ cần hoàn thành</div>
+
+  <div class="android-list-container pop-in delay-4">
+    <button class="android-list-item" id="task1" onclick="completeTask(1, 'https://www.tiktok.com/@vanman250710')">
+      <div class="icon-box bg-tiktok">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/>
+        </svg>
+      </div>
+      <span class="item-text" id="text-task1">Follow TikTok</span>
+      <span class="item-status" id="status-task1"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task1"></i>
+    </button>
+
+    <button class="android-list-item" id="task2" disabled onclick="completeTask(2, 'https://discord.gg/tumadam')">
+      <div class="icon-box bg-discord"><i class="fa-brands fa-discord"></i></div>
+      <span class="item-text" id="text-task2">Tham gia Discord</span>
+      <span class="item-status" id="status-task2"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task2"></i>
+    </button>
+
+    <button class="android-list-item" id="task3" disabled onclick="completeTask(3, 'https://youtube.com/@ntmoba1265')">
+      <div class="icon-box bg-youtube"><i class="fa-brands fa-youtube"></i></div>
+      <span class="item-text" id="text-task3">Đăng Ký Kênh YouTube</span>
+      <span class="item-status" id="status-task3"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task3"></i>
+    </button>
+
+    <button class="android-list-item" id="task4" disabled onclick="completeTask(4, 'https://t.me/tumadammod1')">
+      <div class="icon-box bg-telegram"><i class="fa-brands fa-telegram"></i></div>
+      <span class="item-text" id="text-task4">Vào nhóm Telegram</span>
+      <span class="item-status" id="status-task4"></span>
+      <i class="fa-solid fa-chevron-right item-chevron" id="icon-task4"></i>
+    </button>
+  </div>
+
+  <div class="progress-container pop-in delay-5">
+    <div class="progress-info">
+      <span>Trạng thái mở khoá</span>
+      <span id="progressText">0 / 4</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+  </div>
+
+  <div class="btn-unlock-wrapper pop-in delay-6">
+    <button class="btn-unlock" id="unlockBtn1" disabled onclick="location.href='https://vipmodpro.com/free-key/keytumadam'">
+      <i class="fa-solid fa-lock" id="unlockIcon1"></i> Mở khoá Link Chính (Vượt 1 Link)
+    </button>
+  </div>
+
+  <div class="help-links pop-in delay-8">
+    <button class="help-btn" onclick="window.open('https://pub-8851b5874408441f85670cfe38ce6aa7.r2.dev/video%20hd/copy_D9B62E8E-EDE2-422A-BFA6-266509F30DA8.mov', '_blank')">
+      <i class="fa-solid fa-circle-play"></i> Xem HD Link Chính
+    </button>
+  </div>
+</div>
+
+<div id="videoModal" class="modal-overlay">
+  <div class="modal-content">
+    <div class="video-container">
+      <iframe id="youtubeIframe" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+    <button class="modal-close-btn" onclick="closeVideo()">Đóng Video</button>
+  </div>
+</div>
+
+<script>
+function initGreetingAndClock() {
+  const greetingEl = document.getElementById('greetingText');
+  const clockEl = document.getElementById('clockWidget');
+  const h = new Date().getHours();
+  let greeting = "Good Night";
+  if (h >= 5 && h < 12) greeting = "Good Morning";
+  else if (h >= 12 && h < 18) greeting = "Good Afternoon";
+  else if (h >= 18 && h < 22) greeting = "Good Evening";
+  greetingEl.textContent = greeting;
+  function updateClock() {
+    const now = new Date();
+    let hh = now.getHours(), mm = now.getMinutes();
+    const ampm = hh >= 12 ? 'PM' : 'AM';
+    hh = hh % 12 || 12;
+    mm = mm < 10 ? '0' + mm : mm;
+    clockEl.innerHTML = `<i class="fa-regular fa-clock" style="margin-right:6px"></i> ${hh}:${mm} ${ampm}`;
+  }
+  updateClock(); setInterval(updateClock, 1000);
+  setTimeout(() => {
+    greetingEl.classList.add('slide-up-fade');
+    setTimeout(() => {
+      greetingEl.style.display = 'none';
+      clockEl.style.display = 'block';
+      clockEl.classList.add('slide-up-enter');
+    }, 500);
+  }, 2500);
+}
+initGreetingAndClock();
+
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+const themeIcon = document.getElementById('themeIcon');
+function setTheme(isDark) {
+  if (isDark) { document.body.classList.add('dark-mode'); themeIcon.className = 'fa-solid fa-sun'; themeIcon.style.color = '#FBC02D'; }
+  else { document.body.classList.remove('dark-mode'); themeIcon.className = 'fa-solid fa-moon'; themeIcon.style.color = '#333'; }
+}
+const saved = localStorage.getItem('user-theme');
+const h = new Date().getHours();
+setTheme(saved ? saved === 'dark' : (h >= 18 || h < 6));
+themeToggleBtn.addEventListener('click', () => {
+  const dark = !document.body.classList.contains('dark-mode');
+  setTheme(dark);
+  localStorage.setItem('user-theme', dark ? 'dark' : 'light');
+});
+
+let completedSteps = 0;
+const TOTAL_STEPS = 4;
+function completeTask(step, url) {
+  window.open(url, '_blank');
+  const btn = document.getElementById(`task${step}`);
+  const statusSpan = document.getElementById(`status-task${step}`);
+  const iconRight = document.getElementById(`icon-task${step}`);
+  btn.disabled = true;
+  let countdown = 3;
+  statusSpan.textContent = `Chờ ${countdown}s`;
+  const timer = setInterval(() => {
+    countdown--;
+    if (countdown > 0) { statusSpan.textContent = `Chờ ${countdown}s`; }
+    else {
+      clearInterval(timer);
+      btn.classList.add("done");
+      statusSpan.textContent = "";
+      iconRight.className = "fa-solid fa-check item-chevron";
+      completedSteps++;
+      document.getElementById("progressText").textContent = `${completedSteps} / ${TOTAL_STEPS}`;
+      document.getElementById("progressFill").style.width = `${(completedSteps / TOTAL_STEPS) * 100}%`;
+      if (step < TOTAL_STEPS) { document.getElementById(`task${step + 1}`).disabled = false; }
+      else {
+        const unlockBtn = document.getElementById('unlockBtn1');
+        if (unlockBtn) { unlockBtn.disabled = false; unlockBtn.classList.add("active"); document.getElementById('unlockIcon1').className = "fa-solid fa-lock-open"; }
+      }
+    }
+  }, 1000);
+}
+function openVideo(videoUrl) {
+  document.getElementById('youtubeIframe').src = videoUrl + "?autoplay=1";
+  document.getElementById('videoModal').style.display = 'flex';
+}
+function closeVideo() {
+  document.getElementById('videoModal').style.display = 'none';
+  document.getElementById('youtubeIframe').src = '';
+}
+</script>
+<script src="https://pl26947935.effectivecpmnetwork.com/a3/ff/2e/a3ff2eb3e4415ce00aed34eeedefbeee.js"></script>
+
+</body>
+</html>
