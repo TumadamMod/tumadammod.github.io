@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="vi" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0C120F">
+<title>Aov Map/Mod — Tải APK</title>
+
+<script>
+  (function(){
+    var t='dark';
+    try{ t=localStorage.getItem('apkTheme')||'dark'; }catch(e){}
+    document.documentElement.setAttribute('data-theme',t);
+    var m=document.querySelector('meta[name="theme-color"]');
+    if(m) m.setAttribute('content', t==='dark' ? '#0C120F' : '#F4F7F5');
+  })();
+</script>
+
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --bg:#0C120F;
+    --surface:#151E19;
+    --surface-2:#1E2A24;
+    --line:#27352D;
+    --droid:#3DDC84;          /* xanh robot Android */
+    --droid-deep:#1F9D5B;
+    --on-droid:#04170D;
+    --text:#E9F2EC;
+    --muted:#82968B;
+    --shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+  [data-theme="light"]{
+    --bg:#F4F7F5;
+    --surface:#FFFFFF;
+    --surface-2:#F1F5F2;
+    --line:#DEE6E0;
+    --droid:#0E9F5B;
+    --droid-deep:#0A7C46;
+    --on-droid:#FFFFFF;
+    --text:#101815;
+    --muted:#5C6E64;
+    --shadow:0 8px 24px rgba(16,24,21,.08);
+  }
+
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;min-height:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:Roboto,-apple-system,"Segoe UI",system-ui,Arial,sans-serif;
+    transition:background-color .25s ease,color .25s ease;
+  }
+
+  .label{
+    font-size:11px;font-weight:700;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);
+  }
+
+  /* ============ APPBAR ============ */
+  .appbar{
+    position:sticky;top:0;z-index:40;
+    background:var(--bg);
+    border-bottom:1px solid var(--line);
+    padding-top:env(safe-area-inset-top);
+  }
+  .appbar-in{
+    max-width:600px;margin:0 auto;height:56px;
+    padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  }
+  .brand{display:flex;align-items:center;gap:10px;min-width:0}
+  .brand svg{width:22px;height:22px;color:var(--droid);flex:0 0 auto}
+  .brand span{font-size:15px;font-weight:700;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+  .icon-btn{
+    width:40px;height:40px;flex:0 0 auto;
+    display:flex;align-items:center;justify-content:center;
+    border:1px solid var(--line);border-radius:12px;
+    background:var(--surface);color:var(--text);cursor:pointer;
+    transition:border-color .2s ease,background .2s ease;
+  }
+  .icon-btn:hover{border-color:var(--droid)}
+  .icon-btn:focus-visible{outline:2px solid var(--droid);outline-offset:2px}
+  .icon-btn svg{width:20px;height:20px}
+  .ico-sun{display:none}
+  [data-theme="light"] .ico-sun{display:block}
+  [data-theme="light"] .ico-moon{display:none}
+
+  /* ============ LAYOUT ============ */
+  .wrap{
+    max-width:600px;margin:0 auto;
+    padding:20px 16px calc(32px + env(safe-area-inset-bottom));
+  }
+  .card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:16px;
+    box-shadow:var(--shadow);
+  }
+
+  /* ============ HERO ============ */
+  .hero{display:flex;gap:16px;align-items:center;margin-bottom:22px}
+  .tile{
+    position:relative;overflow:hidden;
+    width:76px;height:76px;flex:0 0 auto;
+    border-radius:22px;
+    background:linear-gradient(145deg,var(--droid),var(--droid-deep));
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px rgba(61,220,132,.22);
+  }
+  .tile svg{width:38px;height:38px;color:var(--on-droid)}
+  /* ảnh icon app: đè lên hình mặc định, ảnh lỗi thì tự gỡ để lộ hình vẽ bên dưới */
+  .tile img{
+    position:absolute;inset:0;z-index:2;
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+
+  .hero-info{min-width:0}
+  .app-name{
+    margin:0 0 8px;font-size:27px;font-weight:900;letter-spacing:-.02em;line-height:1.1;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+  .chip{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:5px 10px;border-radius:8px;
+    background:var(--surface-2);border:1px solid var(--line);
+    font-size:11.5px;font-weight:700;letter-spacing:.02em;color:var(--muted);
+  }
+  .chip svg{width:13px;height:13px;color:var(--droid)}
+  .ver{display:flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--muted)}
+  .live{
+    width:7px;height:7px;border-radius:50%;background:var(--droid);
+    box-shadow:0 0 0 0 rgba(61,220,132,.6);animation:live 2.2s infinite;
+  }
+  @keyframes live{70%{box-shadow:0 0 0 7px rgba(61,220,132,0)}100%{box-shadow:0 0 0 0 rgba(61,220,132,0)}}
+
+  /* ============ NÚT ============ */
+  .btn{
+    position:relative;overflow:hidden;
+    width:100%;display:flex;align-items:center;justify-content:center;gap:9px;
+    padding:15px 20px;border-radius:16px;border:1px solid transparent;
+    font-family:inherit;font-size:16px;font-weight:800;letter-spacing:.01em;
+    cursor:pointer;transition:transform .12s ease,border-color .2s ease,background .2s ease;
+  }
+  .btn:active{transform:scale(.985)}
+  .btn:focus-visible{outline:2px solid var(--droid);outline-offset:3px}
+  .btn svg{width:20px;height:20px;flex:0 0 auto}
+
+  .btn-primary{background:var(--droid);color:var(--on-droid);box-shadow:0 8px 22px rgba(61,220,132,.25)}
+  .btn-primary .lbl,.btn-primary svg{position:relative;z-index:2}
+  .fill{
+    position:absolute;inset:0 auto 0 0;width:0;z-index:1;
+    background:rgba(0,0,0,.16);
+    transition:width 1.6s cubic-bezier(.32,.72,.3,1);
+  }
+  .btn-primary.busy{pointer-events:none}
+  .btn-primary.busy .fill{width:100%}
+
+  .btn-ghost{
+    background:var(--surface-2);color:var(--text);border-color:var(--line);
+    margin-top:10px;font-size:15px;
+  }
+  .btn-ghost svg{color:var(--droid)}
+  .btn-ghost:hover{border-color:var(--droid)}
+
+  /* ============ LƯU Ý CÀI ĐẶT ============ */
+  .note-head{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .note-head svg{width:19px;height:19px;color:var(--droid);flex:0 0 auto}
+  .note-head h2{margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em}
+
+  .steps{margin:0;padding:0;list-style:none;counter-reset:n;display:flex;flex-direction:column;gap:11px}
+  .steps li{
+    counter-increment:n;position:relative;padding-left:32px;
+    font-size:13.5px;line-height:1.65;color:var(--muted);
+  }
+  .steps li::before{
+    content:counter(n);position:absolute;left:0;top:1px;
+    width:21px;height:21px;border-radius:7px;
+    background:var(--surface-2);border:1px solid var(--line);
+    color:var(--droid);font-size:11px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .steps b{color:var(--text);font-weight:700}
+
+  .warn{
+    display:flex;gap:9px;align-items:flex-start;
+    margin:16px 0 0;padding:12px 13px;border-radius:13px;
+    background:var(--surface-2);border:1px solid var(--line);
+    font-size:12.5px;line-height:1.6;color:var(--muted);
+  }
+  .warn svg{width:16px;height:16px;color:var(--droid);flex:0 0 auto;margin-top:2px}
+  .warn b{color:var(--text);font-weight:700}
+
+  /* ============ BẢNG GIÁ ============ */
+  .head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+  .head h2{margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em}
+
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  .plan{
+    position:relative;
+    background:var(--surface-2);border:1px solid var(--line);border-radius:16px;
+    padding:16px 12px 12px;text-align:center;
+    transition:border-color .2s ease,transform .15s ease;
+  }
+  .plan:hover{border-color:var(--droid);transform:translateY(-2px)}
+  .plan.hot{border-color:var(--droid);background:linear-gradient(180deg,rgba(61,220,132,.09),transparent)}
+  .plan .star{
+    position:absolute;top:-9px;left:50%;transform:translateX(-50%);
+    display:inline-flex;align-items:center;gap:4px;
+    background:var(--droid);color:var(--on-droid);
+    padding:3px 9px;border-radius:999px;
+    font-size:10px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;
+  }
+  .plan .star svg{width:11px;height:11px}
+  .plan .term{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .plan .amt{margin:6px 0 12px;font-size:26px;font-weight:900;letter-spacing:-.03em;color:var(--text)}
+  .plan .amt i{font-style:normal;font-size:13px;font-weight:700;color:var(--muted);margin-left:1px}
+  .buy{
+    display:block;width:100%;padding:9px;border-radius:11px;border:none;
+    background:var(--droid);color:var(--on-droid);
+    font-family:inherit;font-size:13px;font-weight:800;letter-spacing:.02em;
+    text-decoration:none;cursor:pointer;transition:filter .2s ease,transform .12s ease;
+  }
+  .buy:hover{filter:brightness(1.07)}
+  .buy:active{transform:scale(.97)}
+  .buy:focus-visible{outline:2px solid var(--droid);outline-offset:2px}
+
+  /* ============ FOOTER ============ */
+  .foot{text-align:center;padding:8px 4px 0;color:var(--muted);font-size:12px;line-height:1.7}
+  .foot a{color:var(--droid);font-weight:700;text-decoration:none}
+
+  @media (max-width:400px){
+    .tile{width:66px;height:66px;border-radius:19px}
+    .tile svg{width:32px;height:32px}
+    .app-name{font-size:23px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+  }
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <div class="appbar-in">
+    <div class="brand">
+      <!-- robot Android -->
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.53 9.4l1.7-2.95a.38.38 0 0 0-.14-.52.38.38 0 0 0-.52.14l-1.73 2.99a10.9 10.9 0 0 0-9.68 0L5.43 6.07a.38.38 0 0 0-.52-.14.38.38 0 0 0-.14.52l1.7 2.95A10.3 10.3 0 0 0 1.2 17.6h21.6a10.3 10.3 0 0 0-5.27-8.2zM7.1 14.72a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1zm9.8 0a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1z"/>
+      </svg>
+      <span>Tumadam Mod</span>
+    </div>
+
+    <button class="icon-btn" id="themeBtn" aria-label="Đổi giao diện sáng / tối">
+      <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M20.4 13.3A8.6 8.6 0 1 1 10.7 3.6a6.7 6.7 0 0 0 9.7 9.7z"/>
+      </svg>
+      <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="4.2"/>
+        <path d="M12 2.6v2.2M12 19.2v2.2M4.4 4.4l1.6 1.6M18 18l1.6 1.6M2.6 12h2.2M19.2 12h2.2M4.4 19.6l1.6-1.6M18 6l1.6-1.6"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="card">
+    <div class="hero">
+      <div class="tile">
+        <!-- ===== ICON APP: dán link ảnh vào src bên dưới. Xoá trống thì dùng hình tâm ngắm mặc định ===== -->
+        <img id="appIcon" src="https://play-lh.googleusercontent.com/gU0rhVqaGc8l1rV_cwmopYrn1J97S1t1kddMu-QE42M4tmzupO44lyIhAlTXF7PbQ5wFk9j6n9uLZc1R9_HV" alt="Aov Map/Mod">
+
+        <!-- hình mặc định (tâm ngắm) khi không có ảnh -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="7.2"/>
+          <path d="M12 1.8v3.4M12 18.8v3.4M1.8 12h3.4M18.8 12h3.4"/>
+          <circle cx="12" cy="12" r="1.9" fill="currentColor" stroke="none"/>
+        </svg>
+      </div>
+
+      <div class="hero-info">
+        <h1 class="app-name">Aov Map/Mod</h1>
+        <div class="chips">
+          <span class="chip">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.53 9.4l1.7-2.95a.38.38 0 0 0-.66-.38l-1.73 2.99a10.9 10.9 0 0 0-9.68 0L5.43 6.07a.38.38 0 0 0-.66.38l1.7 2.95A10.3 10.3 0 0 0 1.2 17.6h21.6a10.3 10.3 0 0 0-5.27-8.2zM7.1 14.72a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1zm9.8 0a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1z"/></svg>
+            Android 64Bit
+          </span>
+          <span class="chip">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7L12 12l8.7-5M12 22V12"/></svg>
+            223MB
+          </span>
+        </div>
+        <p class="ver"><span class="live"></span> Phiên bản 1.63</p>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" id="dlBtn">
+      <span class="fill"></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 3v11.5"/><path d="M7.5 10.5L12 15l4.5-4.5"/><path d="M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/>
+      </svg>
+      <span class="lbl" id="dlLbl">Tải APK</span>
+    </button>
+
+    <a class="btn btn-ghost" href="/getkeygameios/andr" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="8" cy="14" r="4.2"/><path d="M11 11.2L20 2.5"/><path d="M17.4 5.1l2.3 2.3"/><path d="M15 7.5l2.3 2.3"/>
+      </svg>
+      Lấy key miễn phí
+    </a>
+  </section>
+
+  <!-- ===== LƯU Ý CÀI ĐẶT ===== -->
+  <section class="card">
+    <div class="note-head">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 2.8l7.6 3.1v5.4c0 4.5-3.1 8.3-7.6 9.9-4.5-1.6-7.6-5.4-7.6-9.9V5.9z"/>
+        <path d="M8.9 12.1l2.1 2.1 4.1-4.3"/>
+      </svg>
+      <h2>Lưu ý khi cài</h2>
+    </div>
+
+    <ol class="steps">
+      <li>Aov Mod/Map <b>Chơi Mod No hack</b> Thì chỉ bật các chức năng như unlock skin,nút,thông báo hạ</li>
+  </section>
+
+  <section class="card">
+    <div class="head">
+      <h2>Mua key</h2>
+      <span class="label">Kích hoạt ngay</span>
+    </div>
+
+    <div class="grid">
+      <div class="plan">
+        <div class="term">1 ngày</div>
+        <div class="amt">10K<i>đ</i></div>
+        <a class="buy" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">Mua</a>
+      </div>
+
+      <div class="plan">
+        <div class="term">1 tuần</div>
+        <div class="amt">50<i>đ</i></div>
+        <a class="buy" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">Mua</a>
+      </div>
+
+      <div class="plan hot">
+        <span class="star">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.44 6.19 20.5l1.11-6.47L2.6 9.45l6.5-.95z"/></svg>
+          Phổ biến
+        </span>
+        <div class="term">1 tháng</div>
+        <div class="amt">120K<i>đ</i></div>
+        <a class="buy" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">Mua</a>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="foot">
+    © 2026 <a href="https://tumadam.com" rel="noopener">Tumadam Mod</a>
+  </footer>
+
+</main>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---- LINK APK: sửa dòng dưới thành link thật ---- */
+  var APK_LINK = 'https://dl.ipas.cc/apks/7a1d56.apk';
+
+  /* ---- ICON APP: nếu ảnh hỏng hoặc để trống thì tự bỏ, lộ hình tâm ngắm ---- */
+  var appIcon = document.getElementById('appIcon');
+  function dropIcon(){ if (appIcon && appIcon.parentNode) appIcon.parentNode.removeChild(appIcon); }
+  if (appIcon) {
+    var src = (appIcon.getAttribute('src') || '').trim();
+    if (!src) {
+      dropIcon();
+    } else {
+      appIcon.addEventListener('error', dropIcon);
+      if (appIcon.complete && appIcon.naturalWidth === 0) dropIcon();
+    }
+  }
+
+  /* ---- lưu trữ an toàn (localStorage có thể bị chặn trong webview) ---- */
+  var mem = {};
+  function save(k,v){ try{ localStorage.setItem(k,v); }catch(e){ mem[k]=v; } }
+
+  /* ---- sáng / tối ---- */
+  var root = document.documentElement;
+  var meta = document.querySelector('meta[name="theme-color"]');
+  document.getElementById('themeBtn').addEventListener('click', function(){
+    var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    if (meta) meta.setAttribute('content', next === 'dark' ? '#0C120F' : '#F4F7F5');
+    save('apkTheme', next);
+  });
+
+  /* ---- tải APK: chạy tải ngay, nút chạy thanh tiến trình phản hồi ---- */
+  var btn = document.getElementById('dlBtn');
+  var lbl = document.getElementById('dlLbl');
+
+  btn.addEventListener('click', function(){
+    if (btn.classList.contains('busy')) return;
+
+    window.location.href = APK_LINK;
+
+    btn.classList.add('busy');
+    lbl.textContent = 'Đang tải xuống…';
+
+    setTimeout(function(){
+      btn.classList.remove('busy');
+      lbl.textContent = 'Tải APK';
+    }, 2600);
+  });
+})();
+</script>
+
+</body>
+</html>
