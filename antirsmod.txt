@@ -1,5 +1,5 @@
 titleStr = Lưu ý
-strContent = <color=#68B8EA>FILE ĐƯỢC HOÀN THÀNH BỞI</color>\n\n• Tác Giả: <color=#E2C872>KPMxTUMADAMxNT MOBA</color>\n• Website: <color=#00FF80>Tumadam.com</color>\n• Để đăng ký kênh thì bấm vào nút: <color=#FF4500>ĐĂNG KÝ</color>
+strContent = <color=#68B8EA>FILE ĐƯỢC HOÀN THÀNH BỞI</color>\n\n• Tác Giả: <color=#E2C872>TUMADAMxNT MOBA</color>\n• Website: <color=#00FF80>Tumadam.com</color>\n• Để đăng ký kênh thì bấm vào nút: <color=#FF4500>ĐĂNG KÝ</color>
 hasCancelBtn = true
 confirmStr = Nhóm Telegram
 cancelStr = Đăng Ký
