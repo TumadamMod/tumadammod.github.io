@@ -5,4 +5,4 @@ confirmStr = Nhóm Telegram
 cancelStr = Đăng Ký
 onConfirm = https://t.me/tumadammod1
 onCancel = https://youtube.com/@ntmoba1265
-isShowCloseBtn = false
+isShowCloseBtn = true
