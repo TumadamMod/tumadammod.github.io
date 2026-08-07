@@ -1005,6 +1005,62 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .mod-icon.zip  { background: linear-gradient(135deg, #1e1b4b, #3730a3); color: #a5b4fc; }
 .mod-icon.ios  { background: linear-gradient(135deg, #0f172a, #1e3a5f); color: #7dd3fc; }
+.mod-icon.bot  {
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(124,58,237,0.5);
+  animation: botIconPulse 2.2s ease-in-out infinite;
+}
+@keyframes botIconPulse {
+  0%,100% { box-shadow: 0 0 14px rgba(124,58,237,0.4); }
+  50%     { box-shadow: 0 0 24px rgba(6,182,212,0.6); }
+}
+
+/* ===== CARD BOT nổi bật ===== */
+.mod-card-wrap-bot {
+  position: relative;
+  background: linear-gradient(135deg, rgba(124,58,237,0.12), rgba(6,182,212,0.10));
+  border: 1.5px solid transparent;
+  background-clip: padding-box;
+}
+.mod-card-wrap-bot::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4, #7c3aed);
+  background-size: 200% 200%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: botBorderFlow 3s linear infinite;
+  pointer-events: none;
+}
+@keyframes botBorderFlow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+.mod-card-bot .mod-dl-btn,
+.mod-card-wrap-bot .mod-dl-btn {
+  background: linear-gradient(135deg, #7c3aed, #06b6d4) !important;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.45) !important;
+}
+
+/* Badge 24/24 nhấp nháy */
+.mod-badge {
+  display: inline-flex; align-items: center; gap: 3px;
+  margin-left: 7px; padding: 2px 8px;
+  font-size: 10px; font-weight: 800;
+  border-radius: 99px;
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #fff; vertical-align: middle;
+  box-shadow: 0 0 10px rgba(34,197,94,0.5);
+  animation: badgeBlink 1.8s ease-in-out infinite;
+}
+.mod-badge i { font-size: 9px; }
+@keyframes badgeBlink {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%     { opacity: 0.85; transform: scale(1.05); }
+}
 
 .mod-info { flex: 1; min-width: 0; }
 .mod-name {
@@ -1430,6 +1486,94 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .cw-msg.user .cw-bubble strong { color: #c7d2fe; }
 [data-theme="light"] .cw-msg.bot .cw-bubble strong { color: #4338ca; }
 .cw-bubble a { color: #818cf8; font-weight: 600; text-decoration: underline; word-break: break-all; }
+
+/* ===== ICON GAME TRONG TIN NHẮN ===== */
+.cw-game-icon {
+  width: 22px; height: 22px; border-radius: 6px;
+  display: inline-block; vertical-align: -5px;
+  margin-right: 6px; object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+}
+
+/* ===== ICON SVG TRONG TIN NHẮN ===== */
+.cw-svg-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; margin-right: 6px;
+  vertical-align: -4px; color: #818cf8;
+}
+.cw-svg-icon svg { width: 100%; height: 100%; }
+[data-theme="light"] .cw-svg-icon { color: #4338ca; }
+
+/* ===== CARD VIDEO PREVIEW (giống Telegram/Messenger) ===== */
+.cw-video-card {
+  display: block; margin-top: 10px;
+  border-radius: 12px; overflow: hidden;
+  background: rgba(99,102,241,0.10);
+  border: 1px solid rgba(99,102,241,0.28);
+  text-decoration: none !important;
+  transition: 0.2s;
+}
+.cw-video-card:active { transform: scale(0.98); }
+.cw-video-thumb {
+  position: relative; width: 100%; aspect-ratio: 16/9;
+  background: linear-gradient(135deg,#1e1b4b,#312e81);
+  overflow: hidden;
+}
+.cw-video-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.cw-video-ph {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 38px; color: rgba(255,255,255,0.55);
+}
+.cw-video-play {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(0,0,0,0.55); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 24px; padding-left: 3px;
+  border: 2px solid rgba(255,255,255,0.85);
+}
+.cw-video-meta { padding: 9px 12px; }
+.cw-video-src {
+  font-size: 10.5px; color: #818cf8; font-weight: 600;
+  text-transform: lowercase; margin-bottom: 2px;
+}
+.cw-video-title {
+  font-size: 13px; font-weight: 700; color: #e2e8f0;
+  line-height: 1.35; margin-bottom: 2px;
+}
+.cw-video-sub { font-size: 11.5px; color: #94a3b8; line-height: 1.35; }
+[data-theme="light"] .cw-video-title { color: #1e293b; }
+[data-theme="light"] .cw-video-sub   { color: #64748b; }
+[data-theme="light"] .cw-video-card  { background: rgba(99,102,241,0.06); }
+
+/* ===== CHIP BẤM NHANH TRONG TIN NHẮN ===== */
+.cw-inline-chip {
+  display: inline-block; margin: 5px 5px 0 0;
+  padding: 7px 14px; border-radius: 99px;
+  background: rgba(99,102,241,0.16);
+  border: 1.5px solid rgba(99,102,241,0.45);
+  color: #a5b4fc; font-size: 12.5px; font-weight: 700;
+  cursor: pointer; font-family: inherit; transition: 0.2s;
+}
+.cw-inline-chip:hover { background: rgba(99,102,241,0.32); color: #fff; }
+.cw-inline-chip:active { transform: scale(0.96); }
+[data-theme="light"] .cw-inline-chip { color: #4338ca; background: rgba(99,102,241,0.09); }
+
+/* ===== LINK GỌN "tại đây" ===== */
+.cw-link-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: 8px;
+  background: linear-gradient(135deg,#4338ca,#6366f1);
+  color: #fff !important; font-size: 12.5px; font-weight: 700;
+  text-decoration: none !important; margin: 2px 0;
+  box-shadow: 0 2px 8px rgba(99,102,241,0.35);
+  transition: 0.2s; word-break: normal !important;
+}
+.cw-link-btn:active { transform: scale(0.96); }
+.cw-link-btn i { font-size: 10px; }
+
 .cw-msg.user .cw-bubble a { color: #c7d2fe; }
 [data-theme="light"] .cw-msg.bot .cw-bubble a { color: #4338ca; font-weight: 700; }
 .cw-bubble img { max-width: 100%; border-radius: 10px; margin-top: 6px; display: block; cursor: pointer; }
