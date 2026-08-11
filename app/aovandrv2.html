@@ -23,7 +23,7 @@
     --surface:#151E19;
     --surface-2:#1E2A24;
     --line:#27352D;
-    --droid:#3DDC84;          /* xanh robot Android */
+    --droid:#3DDC84;
     --droid-deep:#1F9D5B;
     --on-droid:#04170D;
     --text:#E9F2EC;
@@ -111,7 +111,6 @@
     box-shadow:0 8px 20px rgba(61,220,132,.22);
   }
   .tile svg{width:38px;height:38px;color:var(--on-droid)}
-  /* ảnh icon app: đè lên hình mặc định, ảnh lỗi thì tự gỡ để lộ hình vẽ bên dưới */
   .tile img{
     position:absolute;inset:0;z-index:2;
     width:100%;height:100%;object-fit:cover;display:block;
@@ -193,10 +192,100 @@
   .warn svg{width:16px;height:16px;color:var(--droid);flex:0 0 auto;margin-top:2px}
   .warn b{color:var(--text);font-weight:700}
 
-  /* ============ BẢNG GIÁ ============ */
+  /* ============ PREVIEW CAROUSEL NGANG ============ */
+  .preview-head{display:flex;align-items:center;gap:9px;margin-bottom:14px}
+  .preview-head svg{width:19px;height:19px;color:var(--droid);flex:0 0 auto}
+  .preview-head h2{margin:0;font-size:16px;font-weight:800;letter-spacing:-.01em}
+  .preview-head .count{font-size:12px;color:var(--muted);font-weight:600}
+
+  .carousel-wrapper{position:relative;margin-bottom:12px}
+  .carousel-container{
+    display:flex;gap:12px;overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none; /* Firefox */
+    -ms-overflow-style:none; /* IE/Edge */
+    padding-bottom:4px;
+  }
+  .carousel-container::-webkit-scrollbar{display:none}
+
+  .carousel-slide{
+    flex:0 0 auto;width:82%; /* để lộ một phần ảnh kế bên, tăng cảm giác có thể vuốt */
+    scroll-snap-align:center;
+    border-radius:16px;overflow:hidden;
+    border:1px solid var(--line);
+    background:var(--surface-2);
+    cursor:pointer;
+    transition:transform .2s ease,border-color .2s ease;
+    aspect-ratio:16/9;
+  }
+  .carousel-slide:hover{transform:scale(1.01);border-color:var(--droid)}
+  .carousel-slide img{
+    width:100%;height:100%;object-fit:cover;display:block;
+  }
+  /* placeholder khi chưa có ảnh */
+  .carousel-slide .placeholder{
+    position:absolute;inset:0;z-index:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:6px;color:var(--muted);
+  }
+  .carousel-slide .placeholder svg{width:28px;height:28px;opacity:.45}
+  .carousel-slide .placeholder span{font-size:11px;font-weight:600;letter-spacing:.03em;opacity:.6}
+  .carousel-slide img{position:relative;z-index:1}
+
+  /* nút điều hướng carousel */
+  .carousel-btn{
+    position:absolute;top:50%;transform:translateY(-50%);
+    width:36px;height:36px;border-radius:50%;
+    background:var(--surface);border:1px solid var(--line);
+    color:var(--text);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;z-index:5;transition:background .2s,border-color .2s;
+    box-shadow:0 4px 10px rgba(0,0,0,.2);
+  }
+  .carousel-btn:hover{border-color:var(--droid);background:var(--surface-2)}
+  .carousel-btn:focus-visible{outline:2px solid var(--droid);outline-offset:2px}
+  .carousel-btn svg{width:18px;height:18px;pointer-events:none}
+  .carousel-btn--prev{left:-6px}
+  .carousel-btn--next{right:-6px}
+
+  /* dots */
+  .carousel-dots{
+    display:flex;justify-content:center;gap:8px;margin-top:6px;
+  }
+  .carousel-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--line);
+    transition:background .2s ease,transform .2s ease;
+    cursor:pointer;
+  }
+  .carousel-dot.active{background:var(--droid);transform:scale(1.4)}
+
+  /* lightbox */
+  .lightbox{
+    position:fixed;inset:0;z-index:999;
+    background:rgba(0,0,0,.88);
+    display:flex;align-items:center;justify-content:center;
+    opacity:0;pointer-events:none;
+    transition:opacity .2s ease;
+  }
+  .lightbox.open{opacity:1;pointer-events:auto}
+  .lightbox img{
+    max-width:92vw;max-height:85vh;
+    border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.55);
+  }
+  .lightbox .close{
+    position:absolute;top:20px;right:20px;
+    width:40px;height:40px;border-radius:12px;
+    background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);
+    color:#fff;font-size:22px;line-height:1;
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:background .2s;
+  }
+  .lightbox .close:hover{background:rgba(255,255,255,.2)}
+
+  /* ============ BẢNG GIÁ (ẩn) ============ */
   .head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
   .head h2{margin:0;font-size:17px;font-weight:800;letter-spacing:-.01em}
-
   .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
   .plan{
     position:relative;
@@ -235,6 +324,7 @@
     .tile{width:66px;height:66px;border-radius:19px}
     .tile svg{width:32px;height:32px}
     .app-name{font-size:23px}
+    .carousel-slide{width:85%}
   }
   @media (prefers-reduced-motion:reduce){
     *,*::before,*::after{animation:none!important;transition:none!important}
@@ -246,7 +336,6 @@
 <header class="appbar">
   <div class="appbar-in">
     <div class="brand">
-      <!-- robot Android -->
       <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M17.53 9.4l1.7-2.95a.38.38 0 0 0-.14-.52.38.38 0 0 0-.52.14l-1.73 2.99a10.9 10.9 0 0 0-9.68 0L5.43 6.07a.38.38 0 0 0-.52-.14.38.38 0 0 0-.14.52l1.7 2.95A10.3 10.3 0 0 0 1.2 17.6h21.6a10.3 10.3 0 0 0-5.27-8.2zM7.1 14.72a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1zm9.8 0a1.05 1.05 0 1 1 0-2.1 1.05 1.05 0 0 1 0 2.1z"/>
       </svg>
@@ -270,10 +359,7 @@
   <section class="card">
     <div class="hero">
       <div class="tile">
-        <!-- ===== ICON APP: dán link ảnh vào src bên dưới. Xoá trống thì dùng hình tâm ngắm mặc định ===== -->
         <img id="appIcon" src="https://play-lh.googleusercontent.com/gU0rhVqaGc8l1rV_cwmopYrn1J97S1t1kddMu-QE42M4tmzupO44lyIhAlTXF7PbQ5wFk9j6n9uLZc1R9_HV" alt="Aov Map/Mod">
-
-        <!-- hình mặc định (tâm ngắm) khi không có ảnh -->
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true">
           <circle cx="12" cy="12" r="7.2"/>
           <path d="M12 1.8v3.4M12 18.8v3.4M1.8 12h3.4M18.8 12h3.4"/>
@@ -325,42 +411,68 @@
 
     <ol class="steps">
       <li>Aov Mod/Map <b>Chơi Mod No hack</b> Thì chỉ bật các chức năng như unlock skin,nút,thông báo hạ</li>
-            <li>Đăng Nhập<b>Garena</b> Nếu bị trắng màn thì lên google tải app garena về để login</li>
-                        <li>Đăng Nhập<b>Facebook</b> Bị lỗi thì xoá app facebook sẽ log bình thường</li>
+      <li>Đăng Nhập<b>Garena</b> Nếu bị trắng màn thì lên google tải app garena về để login</li>
+      <li>Đăng Nhập<b>Facebook</b> Bị lỗi thì xoá app facebook sẽ log bình thường</li>
+    </ol>
   </section>
-<!--
+
+  <!-- ===== PREVIEW ẢNH – CAROUSEL NGANG ===== -->
+  <!-- LINK ẢNH: thay src trong mỗi thẻ <img> bên dưới bằng link ảnh chụp màn hình của bạn -->
   <section class="card">
-    <div class="head">
-      <h2>Mua key</h2>
-      <span class="label">Kích hoạt ngay</span>
+    <div class="preview-head">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="3.5"/>
+        <circle cx="8.8" cy="8.8" r="1.7"/>
+        <path d="M21 15l-4.3-4.3L9 18.4"/>
+      </svg>
+      <h2>Ảnh xem trước</h2>
+      <span class="count" id="previewCount">4 ảnh</span>
     </div>
 
-    <div class="grid">
-      <div class="plan">
-        <div class="term">1 ngày</div>
-        <div class="amt">10K<i>đ</i></div>
-        <a class="buy" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">Mua</a>
-      </div>
+    <div class="carousel-wrapper" id="carouselWrapper">
+      <button class="carousel-btn carousel-btn--prev" id="carouselPrev" aria-label="Ảnh trước">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-btn--next" id="carouselNext" aria-label="Ảnh tiếp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
 
-      <div class="plan">
-        <div class="term">1 tuần</div>
-        <div class="amt">50<i>đ</i></div>
-        <a class="buy" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">Mua</a>
-      </div>
+      <div class="carousel-container" id="carouselTrack">
+        <!-- Ảnh 1 -->
+        <div class="carousel-slide" tabindex="0" role="button" aria-label="Xem ảnh 1">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3.5"/><circle cx="8.8" cy="8.8" r="1.7"/><path d="M21 15l-4.3-4.3L9 18.4"/></svg>
+            <span>Preview 1</span>
+          </div>
+          <img src="https://ipas.cc/_next/image?url=https%3A%2F%2Fdl.ipas.cc%2Fpreviews%2F1786466881223-d04m05-IMG_0025.jpeg&w=1920&q=75" alt="Ảnh chụp màn hình 1" loading="lazy">
+        </div>
+        <!-- Ảnh 2 -->
+        <div class="carousel-slide" tabindex="0" role="button" aria-label="Xem ảnh 2">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3.5"/><circle cx="8.8" cy="8.8" r="1.7"/><path d="M21 15l-4.3-4.3L9 18.4"/></svg>
+            <span>Preview 2</span>
+          </div>
+          <img src="https://ipas.cc/_next/image?url=https%3A%2F%2Fdl.ipas.cc%2Fpreviews%2F1786466881224-hm6l8-IMG_0026.jpeg&w=1920&q=75" alt="Ảnh chụp màn hình 2" loading="lazy">
+        </div>
+        <!-- Ảnh 3 -->
+        <div class="carousel-slide" tabindex="0" role="button" aria-label="Xem ảnh 3">
+          <div class="placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="3.5"/><circle cx="8.8" cy="8.8" r="1.7"/><path d="M21 15l-4.3-4.3L9 18.4"/></svg>
+            <span>Preview 3</span>
+          </div>
+          <img src="https://ipas.cc/_next/image?url=https%3A%2F%2Fdl.ipas.cc%2Fpreviews%2F1786466881224-sqbpb-IMG_0027.jpeg&w=1920&q=75" alt="Ảnh chụp màn hình 3" loading="lazy">
+        </div>
 
-      <div class="plan hot">
-        <span class="star">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.6l2.9 5.9 6.5.95-4.7 4.58 1.11 6.47L12 17.44 6.19 20.5l1.11-6.47L2.6 9.45l6.5-.95z"/></svg>
-          Phổ biến
-        </span>
-        <div class="term">1 tháng</div>
-        <div class="amt">120K<i>đ</i></div>
-        <a class="buy" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">Mua</a>
-      </div>
 
-    </div>
+    <div class="carousel-dots" id="carouselDots"></div>
   </section>
--->
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="close" id="lightboxClose" aria-label="Đóng">&times;</button>
+    <img id="lightboxImg" src="" alt="">
+  </div>
+
   <footer class="foot">
     © 2026 <a href="https://tumadam.com" rel="noopener">Tumadam Mod</a>
   </footer>
@@ -371,7 +483,7 @@
 (function(){
   'use strict';
 
-  /* ---- LINK APK: sửa dòng dưới thành link thật ---- */
+  /* ---- LINK APK ---- */
   var APK_LINK = 'https://dl.ipas.cc/apks/oljobn.apk';
 
   /* ---- ICON APP: nếu ảnh hỏng hoặc để trống thì tự bỏ, lộ hình tâm ngắm ---- */
@@ -387,11 +499,137 @@
     }
   }
 
-  /* ---- lưu trữ an toàn (localStorage có thể bị chặn trong webview) ---- */
+  /* ---- CAROUSEL ---- */
+  var track = document.getElementById('carouselTrack');
+  var slides = track.querySelectorAll('.carousel-slide');
+  var prevBtn = document.getElementById('carouselPrev');
+  var nextBtn = document.getElementById('carouselNext');
+  var dotsContainer = document.getElementById('carouselDots');
+  var countEl = document.getElementById('previewCount');
+  var validCount = 0;
+
+  // Xử lý placeholder khi ảnh tải xong
+  slides.forEach(function(slide, index){
+    var img = slide.querySelector('img');
+    var placeholder = slide.querySelector('.placeholder');
+    function onLoad(){
+      placeholder.style.display = 'none';
+      validCount++;
+      updateCount();
+    }
+    function onError(){ /* giữ placeholder */ }
+    var imgSrc = (img.getAttribute('src') || '').trim();
+    if (imgSrc) {
+      img.addEventListener('load', onLoad);
+      img.addEventListener('error', onError);
+      if (img.complete && img.naturalWidth > 0) onLoad();
+      else if (img.complete && img.naturalWidth === 0) onError();
+    }
+  });
+
+  function updateCount(){
+    if (countEl) countEl.textContent = validCount + ' ảnh';
+  }
+
+  // Tạo dots
+  slides.forEach(function(_, i){
+    var dot = document.createElement('span');
+    dot.className = 'carousel-dot';
+    dot.setAttribute('data-index', i);
+    dot.addEventListener('click', function(){
+      scrollToSlide(i);
+    });
+    dotsContainer.appendChild(dot);
+  });
+  var dots = dotsContainer.querySelectorAll('.carousel-dot');
+
+  // Cập nhật dot active và trạng thái nút
+  function updateActiveDot(){
+    var scrollLeft = track.scrollLeft;
+    var trackWidth = track.clientWidth;
+    var activeIndex = 0;
+    var minDistance = Infinity;
+    slides.forEach(function(slide, i){
+      var slideLeft = slide.offsetLeft;
+      var slideCenter = slideLeft + slide.clientWidth / 2;
+      var trackCenter = scrollLeft + trackWidth / 2;
+      var distance = Math.abs(slideCenter - trackCenter);
+      if (distance < minDistance){
+        minDistance = distance;
+        activeIndex = i;
+      }
+    });
+    dots.forEach(function(dot, i){
+      dot.classList.toggle('active', i === activeIndex);
+    });
+    // Vô hiệu nút nếu ở đầu/cuối
+    var atStart = scrollLeft <= 4;
+    var atEnd = scrollLeft + trackWidth >= track.scrollWidth - 4;
+    if (prevBtn) prevBtn.style.opacity = atStart ? '0.35' : '1';
+    if (nextBtn) nextBtn.style.opacity = atEnd ? '0.35' : '1';
+  }
+
+  function scrollToSlide(index){
+    var slide = slides[index];
+    if (!slide) return;
+    var trackWidth = track.clientWidth;
+    var slideLeft = slide.offsetLeft;
+    var slideWidth = slide.clientWidth;
+    // Cuộn để slide nằm giữa
+    var targetScroll = slideLeft - (trackWidth / 2) + (slideWidth / 2);
+    track.scrollTo({ left: targetScroll, behavior: 'smooth' });
+  }
+
+  track.addEventListener('scroll', updateActiveDot, { passive: true });
+  window.addEventListener('resize', updateActiveDot);
+
+  if (prevBtn) prevBtn.addEventListener('click', function(){
+    var activeDot = dotsContainer.querySelector('.carousel-dot.active');
+    var currentIndex = activeDot ? parseInt(activeDot.getAttribute('data-index')) : 0;
+    if (currentIndex > 0) scrollToSlide(currentIndex - 1);
+  });
+  if (nextBtn) nextBtn.addEventListener('click', function(){
+    var activeDot = dotsContainer.querySelector('.carousel-dot.active');
+    var currentIndex = activeDot ? parseInt(activeDot.getAttribute('data-index')) : 0;
+    if (currentIndex < slides.length - 1) scrollToSlide(currentIndex + 1);
+  });
+
+  // Khởi tạo
+  updateActiveDot();
+
+  /* ---- LIGHTBOX ---- */
+  var lightbox = document.getElementById('lightbox');
+  var lightboxImg = document.getElementById('lightboxImg');
+  var lightboxClose = document.getElementById('lightboxClose');
+
+  track.addEventListener('click', function(e){
+    var slide = e.target.closest('.carousel-slide');
+    if (!slide) return;
+    var img = slide.querySelector('img');
+    var src = (img && img.getAttribute('src') || '').trim();
+    if (!src) return;
+    lightboxImg.src = src;
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+  });
+
+  lightboxClose.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function(e){
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+  });
+
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    lightboxImg.src = '';
+  }
+
+  /* ---- THEME ---- */
   var mem = {};
   function save(k,v){ try{ localStorage.setItem(k,v); }catch(e){ mem[k]=v; } }
-
-  /* ---- sáng / tối ---- */
   var root = document.documentElement;
   var meta = document.querySelector('meta[name="theme-color"]');
   document.getElementById('themeBtn').addEventListener('click', function(){
@@ -401,18 +639,14 @@
     save('apkTheme', next);
   });
 
-  /* ---- tải APK: chạy tải ngay, nút chạy thanh tiến trình phản hồi ---- */
+  /* ---- TẢI APK ---- */
   var btn = document.getElementById('dlBtn');
   var lbl = document.getElementById('dlLbl');
-
   btn.addEventListener('click', function(){
     if (btn.classList.contains('busy')) return;
-
     window.location.href = APK_LINK;
-
     btn.classList.add('busy');
     lbl.textContent = 'Đang tải xuống…';
-
     setTimeout(function(){
       btn.classList.remove('busy');
       lbl.textContent = 'Tải APK';
@@ -420,6 +654,5 @@
   });
 })();
 </script>
-
 </body>
 </html>
