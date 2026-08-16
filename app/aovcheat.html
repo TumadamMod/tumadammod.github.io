@@ -257,7 +257,7 @@
     }
     .price-card .buy-btn:active { transform: scale(.96); }
 
-    /* ====== XEM TRƯỚC ====== */
+    /* ====== XEM TRƯỚC (FIX: bổ sung CSS .section-head bị thiếu) ====== */
     .section-head { display: flex; align-items: center; justify-content: space-between; margin: 2px 2px 12px; }
     .section-head h2 {
       margin: 0; font-size: 18px; font-weight: 900; color: var(--heading-glow);
@@ -272,17 +272,18 @@
       scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
     }
-    .screenshot-list li { flex: 0 0 auto; width: 90%; max-width: 640px; scroll-snap-align: center; }
+.screenshot-list li { flex: 0 0 auto; width: 90%; max-width: 640px; scroll-snap-align: center; }
 
-    .preview-media {
-      width: 100%;
-      aspect-ratio: 16 / 9;   /* ảnh ngang */
-      object-fit: cover;
-      border-radius: 14px; display: block;
-      box-shadow: var(--card-shadow); background: #000;
-    }
+.preview-media {
+  width: 100%;
+  aspect-ratio: 16 / 9;   /* ảnh ngang */
+  object-fit: cover;
+  border-radius: 14px; display: block;
+  box-shadow: var(--card-shadow); background: #000;
+}
 
-    /* ====== HƯỚNG DẪN TESTFLIGHT ====== */
+
+    /* ====== HƯỚNG DẪN TIN CẬY ====== */
     .note-box a { color: var(--heading-glow); font-weight: 800; text-decoration: underline; }
     .trust-guide { scroll-margin-top: 70px; } /* tránh bị appbar sticky che khi cuộn tới */
     .trust-intro { margin: 0 0 14px; color: var(--muted); font-size: 14px; line-height: 1.6; }
@@ -452,7 +453,7 @@
   <div class="card hero">
     <div class="hero-top">
       <div class="app-icon-wrap">
-        <img class="app-icon" src="https://play-lh.googleusercontent.com/gU0rhVqaGc8l1rV_cwmopYrn1J97S1t1kddMu-QE42M4tmzupO44lyIhAlTXF7PbQ5wFk9j6n9uLZc1R9_HV" alt="AovMod">
+        <img class="app-icon" src="https://play-lh.googleusercontent.com/Yw0Btf8-k6y4lOnAUf7XW6GYP8SwxXsqWcnabNhqXUSFNhn_azJ-t9jDTdR4a063qwUPo-JtCQAmoLfo8gecTA=w240-h480-rw" alt="LQM">
       </div>
       <div class="hero-info">
         <h1 class="app-name">AovCheat</h1>
@@ -477,16 +478,17 @@
       <div class="freekey-box">
         <div class="freekey-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Lấy Key Free</div>
         <p>Vượt link bên dưới (mất khoảng 1-3 phút) để nhận Key Free</p>
-        <a class="freekey-btn" href="https://tumadammod.github.io/getkeygame/" target="_blank" rel="noopener">VƯỢT LINK LẤY KEY FREE</a>
+        <a class="freekey-btn" href="https://tumadammod.github.io/getkeygame" target="_blank" rel="noopener">VƯỢT LINK LẤY KEY FREE</a>
       </div>
 
       <div class="note-box">
-        <p><b>Lưu ý:</b> Bạn có thể chọn <b>Cài qua TestFlight</b> hoặc <b>tải file IPA</b> để tự cài.</p>
-        <p>• Nếu chọn <b>Cài qua TestFlight</b>, máy cần cài sẵn app <b>TestFlight</b> (miễn phí trên App Store) — xem <a href="#trustGuide">hướng dẫn bên dưới</a>.</p>
+        <p><b>Lưu ý:</b> Bạn có thể chọn <b>Cài trực tiếp (iTMS)</b> hoặc <b>tải file IPA</b> để tự cài.</p>
+        <p>• Nếu chọn <b>Cài trực tiếp</b>, sau khi cài xong cần <b>tin cậy ứng dụng</b> theo <a href="#trustGuide">hướng dẫn bên dưới</a>.</p>
         <p>• Nếu chọn <b>IPA</b>, bạn cần dùng máy tính hoặc tool hỗ trợ (AltStore, Sideloadly,...).</p>
       </div>
 <!--
       <div class="premium-title">Mua Key</div>
+       FIX: sắp lại thứ tự gói theo thời hạn tăng dần: Ngày → Tuần → Tháng → Mùa 
       <div class="pricing-grid">
         <div class="price-card">
           <h3>1 Ngày</h3>
@@ -495,13 +497,13 @@
         </div>
         <div class="price-card">
           <h3>Tuần</h3>
-          <div class="price">40K<span> đ</span></div>
+          <div class="price">15K<span> đ</span></div>
           <a class="buy-btn" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">MUA NGAY</a>
         </div>
         <div class="price-card best">
           <span class="tag">Phổ Biến</span>
           <h3>1 Tháng</h3>
-          <div class="price">120K<span> đ</span></div>
+          <div class="price">45K<span> đ</span></div>
           <a class="buy-btn" href="https://t.me/tumadamshopBot" target="_blank" rel="noopener">MUA NGAY</a>
         </div>
       </div>
@@ -510,27 +512,32 @@
 -->
   <div class="card">
     <div class="section-head"><h2>Xem Trước</h2><div class="sub">iPhone</div></div>
-    <!-- FIX: trước đây danh sách ảnh bị lồng 2 lớp (HTML sai, sinh 2 vùng cuộn chồng nhau) -->
     <ul class="screenshot-list">
-      <li><img class="preview-media" src="https://cdn.tumadam.com/games/preview/3a71476e-968c-4b3c-bece-1f06f11b94db.png" alt="Ảnh 1" loading="lazy" decoding="async"></li>
-      <li><img class="preview-media" src="https://cdn.tumadam.com/games/preview/dbb1a706-0a7e-4d10-9875-2dc358f1dd6d.png" alt="Ảnh 2" loading="lazy" decoding="async"></li>
-      <li><img class="preview-media" src="https://cdn.tumadam.com/games/preview/ef3d8709-a6a9-4970-9b53-ce66863fc4f6.png" alt="Ảnh 3" loading="lazy" decoding="async"></li>
+      <li>
+        <!-- FIX: file .mov là video, dùng <video> thay cho <img> (img không hiển thị được video) -->
+<ul class="screenshot-list">
+  <li><img class="preview-media" src="https://cdn.tumadam.com/games/preview/3a71476e-968c-4b3c-bece-1f06f11b94db.png" alt="Ảnh 1" loading="lazy" decoding="async"></li>
+  <li><img class="preview-media" src="https://cdn.tumadam.com/games/preview/dbb1a706-0a7e-4d10-9875-2dc358f1dd6d.png" alt="Ảnh 2" loading="lazy" decoding="async"></li>
+  <li><img class="preview-media" src="https://cdn.tumadam.com/games/preview/ef3d8709-a6a9-4970-9b53-ce66863fc4f6.png" alt="Ảnh 3" loading="lazy" decoding="async"></li>
+</ul>
+
+      </li>
     </ul>
   </div>
 
-  <!-- HƯỚNG DẪN CÀI QUA TESTFLIGHT (tự cuộn tới sau khi bấm Cài qua TestFlight) -->
+  <!-- HƯỚNG DẪN TIN CẬY ỨNG DỤNG (tự cuộn tới sau khi bấm Cài trực tiếp) -->
   <div class="card trust-guide" id="trustGuide">
-    <div class="section-head"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg> Hướng Dẫn Cài Qua TestFlight</h2><div class="sub">iPhone / iPad</div></div>
-    <p class="trust-intro">TestFlight là app thử nghiệm chính chủ của Apple, cài qua đây <b>không cần tin cậy hồ sơ</b> như bản IPA. Làm theo các bước sau:</p>
+    <div class="section-head"><h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> Hướng Dẫn Tin Cậy Ứng Dụng</h2><div class="sub">Sau khi cài</div></div>
+    <p class="trust-intro">Sau khi cài trực tiếp, app <b>chưa mở được ngay</b> vì iOS chặn nhà phát triển chưa được tin cậy. Làm theo các bước sau:</p>
     <ol class="trust-steps">
-      <li>Mở <b>App Store</b>, tìm và tải app <b>TestFlight</b> (miễn phí). Máy nào có sẵn thì bỏ qua bước này.</li>
-      <li>Quay lại trang này, bấm <b>CÀI ĐẶT NGAY</b> → chọn <b>Cài qua TestFlight</b>.</li>
-      <li>Safari hỏi mở TestFlight thì bấm <b>Mở</b>, app TestFlight sẽ tự bật lên.</li>
-      <li>Trong TestFlight bấm <b>Chấp nhận</b> (Accept) để nhận lời mời thử nghiệm.</li>
-      <li>Bấm <b>Cài đặt</b> (Install) và chờ app tải về màn hình chính.</li>
-      <li>Mở <b>App</b>, nhập key là xong <svg class="li-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.27"></polyline></svg></li>
+      <li><b>Chờ app tải xong</b> — icon App hiện đầy đủ ngoài màn hình chính.</li>
+      <li>Mở <b>Cài đặt</b> → <b>Cài đặt chung</b>.</li>
+      <li>Kéo xuống, chọn <b>VPN & Quản lý thiết bị</b> (iOS cũ: <b>Quản lý thiết bị</b>).</li>
+      <li>Bấm vào tên nhà phát triển trong mục <b>Ứng dụng doanh nghiệp</b>.</li>
+      <li>Bấm <b>Tin cậy</b> → xác nhận <b>Tin cậy</b> lần nữa.</li>
+      <li>Quay lại màn hình chính, mở <b>App</b> và nhập key là xong <svg class="li-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.27"></polyline></svg></li>
     </ol>
-    <p class="trust-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>Báo "This beta is full" là slot TestFlight đã đầy — thử lại sau ít phút hoặc chọn cách tải file IPA. Bản TestFlight hết hạn sau 90 ngày, hết hạn thì vào lại trang này cài bản mới.</span></p>
+    <p class="trust-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg><span>Nếu chưa thấy mục "VPN & Quản lý thiết bị", hãy chờ app tải xong 100% rồi mở lại Cài đặt.</span></p>
   </div>
 
   <footer class="footer">
@@ -544,10 +551,10 @@
     <h3 id="installTitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg> Chọn phương thức cài đặt</h3>
     <div class="modal-options">
       <button class="modal-btn" id="chooseDirect">
-        <span class="icon ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></span>
+        <span class="icon ic-purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></span>
         <span class="modal-btn-text">
-          <b>Cài qua TestFlight</b>
-          <small>Cần app TestFlight · bấm Chấp nhận rồi Cài đặt</small>
+          <b>Cài trực tiếp (iTMS)</b>
+          <small>Cài thẳng lên máy · xong nhớ tin cậy app</small>
         </span>
         <span class="chev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
       </button>
@@ -582,10 +589,12 @@
     var AUTO_RELOAD_SECONDS = 0;
     if (AUTO_RELOAD_SECONDS > 0) {
       setInterval(function () {
-        // Không tải lại khi đang mở hộp thoại cài đặt (tránh làm phiền)
+        // Không tải lại khi đang mở hộp thoại cài đặt hoặc đang xem video (tránh làm phiền)
         var modal = document.getElementById('installModal');
         var modalOpen = modal && modal.classList.contains('active');
-        if (!modalOpen) window.location.reload();
+        var vid = document.querySelector('video');
+        var videoPlaying = vid && !vid.paused && !vid.ended;
+        if (!modalOpen && !videoPlaying) window.location.reload();
       }, AUTO_RELOAD_SECONDS * 1000);
     }
 
@@ -615,9 +624,9 @@
     });
 
     /* ====== LINK THẬT (CHỈNH SỬA TẠI ĐÂY) ====== */
-    // Link TestFlight: lấy trong App Store Connect, dạng https://testflight.apple.com/join/XXXXXXXX
-    var TESTFLIGHT_LINK = "https://testflight.apple.com/join/GUkAx6jc";
-    var IPA_LINK        = "https://dl.ipas.cc/ipas/x1f8cv.ipa";   // Link tải IPA thật
+    // Link iTMS: BẮT BUỘC trỏ tới file manifest .plist qua HTTPS (xem file manifest mẫu kèm theo)
+    var ITMS_LINK = "itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/tumadammod/manifest/refs/heads/main/aovcheat.plist";
+    var IPA_LINK  = "https://dl.ipas.cc/ipas/x1f8cv.ipa";         // Link tải IPA thật
 
     /* ====== MODAL ====== */
     var modalOverlay = document.getElementById('installModal');
@@ -674,7 +683,7 @@
       if (e.key === 'Escape' && modalOverlay.classList.contains('active')) closeModal();
     });
 
-    /* ====== TỰ CUỘN XUỐNG HƯỚNG DẪN TESTFLIGHT ====== */
+    /* ====== TỰ CUỘN XUỐNG HƯỚNG DẪN TIN CẬY ====== */
     var trustGuide = document.getElementById('trustGuide');
 
     function scrollToTrustGuide() {
@@ -683,24 +692,24 @@
       setTimeout(function () { trustGuide.classList.remove('flash'); }, 2300);
     }
 
-    // Chọn Cài qua TestFlight
+    // Chọn Cài trực tiếp (iTMS)
     btnDirect.addEventListener('click', function () {
       closeModal();
 
       var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
                   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
       if (!isIOS) {
-        alert('TestFlight chỉ cài được trên iPhone / iPad. Vui lòng mở trang này bằng Safari trên iOS!');
+        alert('Cài trực tiếp chỉ hoạt động trên iPhone / iPad. Vui lòng mở trang này bằng Safari trên iOS!');
         return;
       }
 
-      // Link TestFlight điều hướng bằng location.href để Safari mở thẳng app TestFlight
-      window.location.href = TESTFLIGHT_LINK;
+      // Link itms phải điều hướng bằng location.href (window.open sẽ bị chặn / mở tab trống)
+      window.location.href = ITMS_LINK;
 
       // Nút chính xoay "ĐANG CÀI ĐẶT..." rồi tự trở lại như cũ
       startInstallEffect();
 
-      // Sau khi TestFlight bật lên thì trang tự cuộn xuống hướng dẫn
+      // iOS hiện hộp thoại cài đặt xong thì trang tự cuộn xuống hướng dẫn tin cậy
       setTimeout(scrollToTrustGuide, 700);
     });
 
